@@ -56,6 +56,11 @@ _DP_CRUISE_MAX_V_SPORT = [3.0, 3.5, 3.0, 2.0, 2.0]
 _DP_CRUISE_MAX_V_FOLLOWING = [1.6, 1.4, 1.4, .7, .3]
 _DP_CRUISE_MAX_BP = [0., 5., 10., 20., 55.]
 
+#toybox profile
+_DP_CRUISE_MIN_V_ECO = [-1.0, -0.7, -0.6, -0.5, -0.3]
+_DP_CRUISE_MIN_V_FOLLOWING = [-0.65, -0.8, -1.0, -1.5, -2.0]
+_DP_CRUISE_MAX_V_ECO = [0.8, 0.8, 0.7, 0.4, 0.2]
+_DP_CRUISE_MAX_V_FOLLOWING = [1.2, 1.1, 1.0, .7, .3]
 # Lookup table for turns
 _DP_TOTAL_MAX_V = [3.3, 3.0, 3.9]
 _DP_TOTAL_MAX_BP = [0., 25., 55.]

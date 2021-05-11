@@ -146,12 +146,7 @@ def confd_thread():
     dashcam
     ===================================================
     '''
-    if msg.dragonConf.dpDashcam and frame % HERTZ == 0:
-      dashcam.run(started, free_space)
-      last_dashcam_recorded = True
-    if last_dashcam_recorded and not msg.dragonConf.dpDashcam:
-      dashcam.stop()
-      last_dashcam_recorded = False
+
     '''
     ===================================================
     finalise

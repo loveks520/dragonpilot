@@ -80,7 +80,7 @@ class LanePlanner:
     offset = self.dp_camera_offset * 0.01 if self.dp_camera_offset != 0 else 0
     self.l_poly[3] += offset
     self.r_poly[3] += offset
-    self.p_poly[3] += offset
+    #self.p_poly[3] += offset#update
 
     # Reduce reliance on lanelines that are too far apart or
     # will be in a few seconds
@@ -89,7 +89,7 @@ class LanePlanner:
     prob_mods = []
     for t_check in [0.0, 1.5, 3.0]:
       width_at_t = eval_poly(width_poly, t_check * (v_ego + 7))
-      prob_mods.append(interp(width_at_t, [4.0, 5.0], [1.0, 0.0]))
+      prob_mods.append(interp(width_at_t, [4.0, 5.0], [0.0, 0.0])) #update
     mod = min(prob_mods)
     l_prob *= mod
     r_prob *= mod

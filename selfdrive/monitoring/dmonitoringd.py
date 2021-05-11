@@ -49,9 +49,9 @@ def dmonitoringd_thread(sm=None, pm=None):
     if not sm['dragonConf'].dpDriverMonitor:
       driver_status.active_monitoring_mode = False
       driver_status.face_detected = False
-      driver_status.threshold_pre = 15. / sm['dragonConf'].dpSteeringMonitorTimer
-      driver_status.threshold_prompt = 6. / sm['dragonConf'].dpSteeringMonitorTimer
-      driver_status.step_change = DT_DMON / sm['dragonConf'].dpSteeringMonitorTimer
+      driver_status.threshold_pre = 15. / 1100
+      driver_status.threshold_prompt = 6. / 1100
+      driver_status.step_change = DT_DMON / 1100
       if not sm['dragonConf'].dpSteeringMonitor:
         driver_status.awareness = 1.
         driver_status.awareness_active = 1.
@@ -70,6 +70,7 @@ def dmonitoringd_thread(sm=None, pm=None):
                         sm['carState'].steeringPressed or \
                         sm['carState'].gasPressed or \
                         sm['carState'].brakePressed
+      driver_engaged = True
       if driver_engaged:
         driver_status.update(Events(), True, sm['controlsState'].enabled, sm['carState'].standstill)
       v_cruise_last = v_cruise
