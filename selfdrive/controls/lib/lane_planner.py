@@ -89,7 +89,7 @@ class LanePlanner:
     prob_mods = []
     for t_check in [0.0, 1.5, 3.0]:
       width_at_t = eval_poly(width_poly, t_check * (v_ego + 7))
-      prob_mods.append(interp(width_at_t, [4.0, 5.0], [0.0, 0.0])) #update
+      prob_mods.append(interp(width_at_t, [3.5, 4.5], [0.0, 0.0])) #update
     mod = min(prob_mods)
     l_prob *= mod
     r_prob *= mod
