@@ -10,7 +10,7 @@ class LatControlPID():
                             (CP.lateralTuning.pid.kiBP, CP.lateralTuning.pid.kiV),
                             (CP.lateralTuning.pid.kdBP, CP.lateralTuning.pid.kdV),
                             k_f=CP.lateralTuning.pid.kf, pos_limit=1.0, sat_limit=CP.steerLimitTimer)
-    self.new_kf_tuned = True					
+    #self.new_kf_tuned = True					
     self.angle_steers_des = 0.
 
   def reset(self):
@@ -35,11 +35,11 @@ class LatControlPID():
       if CP.steerControlType == car.CarParams.SteerControlType.torque:
         # TODO: feedforward something based on path_plan.rateSteers
         steer_feedforward -= path_plan.angleOffset # subtract the offset, since it does not contribute to resistive torque
-        if self.new_kf_tuned:
+      #  if self.new_kf_tuned:
           _c1, _c2, _c3 = 0.35189607550172824, 7.506201251644202, 69.226826411091
           steer_feedforward *= _c1 * CS.vEgo ** 2 + _c2 * CS.vEgo + _c3
-        else:
-          steer_feedforward *= CS.vEgo ** 2  # proportional to realigning tire momentum (~ lateral accel)
+      #  else:
+      #    steer_feedforward *= CS.vEgo ** 2  # proportional to realigning tire momentum (~ lateral accel)
       deadzone = 0.0
 
       check_saturation = (CS.vEgo > 10) and not CS.steeringRateLimited and not CS.steeringPressed
