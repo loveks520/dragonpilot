@@ -26,7 +26,7 @@ class CarInterface(CarInterfaceBase):
   def get_params(candidate, fingerprint=gen_empty_fingerprint(), has_relay=False, car_fw=[]):  # pylint: disable=dangerous-default-value
     ret = CarInterfaceBase.get_std_params(candidate, fingerprint, has_relay)
     
-    prius_use_pid = True  # op_params.get('prius_use_pid')
+    prius_use_pid = False  # op_params.get('prius_use_pid')
     
     ret.carName = "toyota"
     ret.safetyModel = car.CarParams.SafetyModel.toyota
