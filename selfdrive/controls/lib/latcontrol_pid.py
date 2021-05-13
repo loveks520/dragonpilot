@@ -10,7 +10,7 @@ class LatControlPID():
                             (CP.lateralTuning.pid.kiBP, CP.lateralTuning.pid.kiV),
                             (CP.lateralTuning.pid.kdBP, CP.lateralTuning.pid.kdV),
                             k_f=CP.lateralTuning.pid.kf, pos_limit=1.0, sat_limit=CP.steerLimitTimer)
-    #self.new_kf_tuned = True					
+    p_testing_px = False		#testing open		
     self.angle_steers_des = 0.
 
   def reset(self):
@@ -35,6 +35,16 @@ class LatControlPID():
       if CP.steerControlType == car.CarParams.SteerControlType.torque:
         # TODO: feedforward something based on path_plan.rateSteers
         steer_feedforward -= path_plan.angleOffset # subtract the offset, since it does not contribute to resistive torque
+        #testing-----------------------
+        if p_testing_px = True
+           px = [0.0, 1.4082, 2.80311, 4.22661, 5.38271, 6.16561, 7.24781, 8.28308, 10.24465, 12.96402, 15.42303, 18.11903, 20.11703, 24.46614, 29.05805, 32.71015, 35.76326, 40]
+           #km/h[0,   5,    10,   15,   19,   22,   25,   29,   36,   43,   54,   64,   72,   87,   104,  117,  128   144]
+           py = [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.2, 0.3, 0.5, 0.5, 0.5, 0.5]  
+           #                                                      72,  87, 104, 117, 128 ,144
+           steer_feedforward -= interp(CS.vEgo, px, py)
+        
+        
+        #testing end-------------------
       #  if self.new_kf_tuned:
         _c1, _c2, _c3 = 0.35189607550172824, 7.506201251644202, 69.226826411091
         steer_feedforward *= _c1 * CS.vEgo ** 2 + _c2 * CS.vEgo + _c3
