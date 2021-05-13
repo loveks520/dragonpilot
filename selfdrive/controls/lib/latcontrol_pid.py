@@ -2,7 +2,7 @@ from selfdrive.controls.lib.pid import P4_PIController
 from selfdrive.controls.lib.drive_helpers import get_steer_max
 from cereal import car
 from cereal import log
-
+from common.numpy_fast import clip, interp
 
 class LatControlPID():
   def __init__(self, CP):
