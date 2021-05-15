@@ -61,12 +61,12 @@ class CarInterface(CarInterfaceBase):
       stop_and_go = True
       ret.safetyParam = 66  # see conversion factor for STEER_TORQUE_EPS in dbc file
       ret.wheelbase = 2.70
-      ret.steerRatio = 13.4   #sh=13.4 unknown end-to-end spec
+      ret.steerRatio = 15.74   #sh=13.4 unknown end-to-end spec
       tire_stiffness_factor = 0.6371   # hand-tune
       ret.mass = 3045. * CV.LB_TO_KG + STD_CARGO_KG
       ret.steerActuatorDelay = 0.5
       if prius_use_pid:
-        ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.07], [0.04]]
+        ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.06], [0.04]]
         ret.lateralTuning.pid.kdV = [0.]
         ret.lateralTuning.pid.kf = 0.00009531750004645412
       else:
