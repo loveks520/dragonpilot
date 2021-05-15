@@ -10,7 +10,8 @@ class LatControlPID():
                             (CP.lateralTuning.pid.kiBP, CP.lateralTuning.pid.kiV),
                             (CP.lateralTuning.pid.kdBP, CP.lateralTuning.pid.kdV),
                             k_f=CP.lateralTuning.pid.kf, pos_limit=1.0, sat_limit=CP.steerLimitTimer)
-    p_testing_px = False		#testing open		
+	
+    self.new_kf_tuned = True
     self.angle_steers_des = 0.
 
   def reset(self):
@@ -20,7 +21,9 @@ class LatControlPID():
     pid_log = log.ControlsState.LateralPIDState.new_message()
     pid_log.steerAngle = float(CS.steeringAngle)
     pid_log.steerRate = float(CS.steeringRate)
-
+    
+    p_testing_px = False		#testing open	
+    
     if CS.vEgo < 0.3 or not active:
       output_steer = 0.0
       pid_log.active = False
@@ -43,11 +46,11 @@ class LatControlPID():
           #     0   5   10  15  19  22                           72,  87, 104, 117, 128 ,144
           steer_feedforward -= interp(CS.vEgo, px, py)
         #testing end-------------------
-      #  if self.new_kf_tuned:
-        _c1, _c2, _c3 = 0.35189607550172824, 7.506201251644202, 69.226826411091
-        steer_feedforward *= _c1 * CS.vEgo ** 2 + _c2 * CS.vEgo + _c3
-      #  else:
-      #    steer_feedforward *= CS.vEgo ** 2  # proportional to realigning tire momentum (~ lateral accel)
+        if self.new_kf_tuned:
+          _c1, _c2, _c3 = 0.35189607550172824, 7.506201251644202, 69.226826411091
+          steer_feedforward *= _c1 * CS.vEgo ** 2 + _c2 * CS.vEgo + _c3
+        else:
+          steer_feedforward *= CS.vEgo ** 2  # proportional to realigning tire momentum (~ lateral accel)
       deadzone = 0.0
 
       check_saturation = (CS.vEgo > 10) and not CS.steeringRateLimited and not CS.steeringPressed
