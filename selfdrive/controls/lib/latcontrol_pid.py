@@ -39,7 +39,7 @@ class LatControlPID():
         # TODO: feedforward something based on path_plan.rateSteers
         steer_feedforward -= path_plan.angleOffset # subtract the offset, since it does not contribute to resistive torque
         #testing----------------------- round(80.23456, 2)
-        if p_testing_px and CS.vEgo < 2:
+        if p_testing_px and CS.vEgo > 2:
           px = [0.0, 1.4082, 2.80311, 4.22661, 5.38271, 6.16561, 7.24781, 8.28308, 10.24465, 12.96402, 15.42303, 18.11903, 20.11703, 24.46614, 29.05805, 32.71015, 35.76326, 40]
           #km/h[0,   5,    10,   15,   19,   22,   25,   29,   36,   43,   54,   64,   72,   87,   104,  117,  128   144]
           py = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.9, 0.8, 0.8, 0.8, 0.8]  
