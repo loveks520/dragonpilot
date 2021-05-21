@@ -33,7 +33,8 @@ class CarInterface(CarInterfaceBase):
 
     ret.steerActuatorDelay = 0.12  # Default delay, Prius has larger delay
     ret.steerLimitTimer = 0.4
-
+    ret.steerRateCost = 0.5
+    
     if candidate in [CAR.COROLLA_TSS2, CAR.COROLLAH_TSS2, CAR.RAV4_TSS2, CAR.RAV4H_TSS2]:
       ret.longitudinalTuning.deadzoneBP = [0., 8.05]
       ret.longitudinalTuning.deadzoneV = [.0, .14]
@@ -61,7 +62,7 @@ class CarInterface(CarInterfaceBase):
       stop_and_go = True
       ret.safetyParam = 66  # see conversion factor for STEER_TORQUE_EPS in dbc file
       ret.wheelbase = 2.70
-      ret.steerRatio = 15.74   #sh=13.4 unknown end-to-end spec
+      ret.steerRatio = 13.4   #sh=13.4 orn 15.74  unknown end-to-end spec
       tire_stiffness_factor = 0.6371   # hand-tune
       ret.mass = 3045. * CV.LB_TO_KG + STD_CARGO_KG
       ret.steerActuatorDelay = 0.5
@@ -331,7 +332,7 @@ class CarInterface(CarInterfaceBase):
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.3], [0.05]]
       ret.lateralTuning.pid.kf = 0.00006
 
-    ret.steerRateCost = 1.
+    #ret.steerRateCost = 1.
     ret.centerToFront = ret.wheelbase * 0.44
 
     # dp
