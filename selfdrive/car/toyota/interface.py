@@ -26,7 +26,7 @@ class CarInterface(CarInterfaceBase):
   def get_params(candidate, fingerprint=gen_empty_fingerprint(), has_relay=False, car_fw=[]):  # pylint: disable=dangerous-default-value
     ret = CarInterfaceBase.get_std_params(candidate, fingerprint, has_relay)
     
-    prius_use_pid = True  # op_params.get('prius_use_pid')
+    prius_use_pid = False  # op_params.get('prius_use_pid')
     
     ret.carName = "toyota"
     ret.safetyModel = car.CarParams.SafetyModel.toyota
@@ -64,7 +64,7 @@ class CarInterface(CarInterfaceBase):
       ret.steerRatio = 13.4   #sh=13.4 orn 15.74  unknown end-to-end spec
       tire_stiffness_factor = 0.6371   # hand-tune
       ret.mass = 3045. * CV.LB_TO_KG + STD_CARGO_KG
-      ret.steerActuatorDelay = 0.3
+      ret.steerActuatorDelay = 0.5
       if prius_use_pid:
         ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.07], [0.04]]
         ret.lateralTuning.pid.kdV = [0.]
