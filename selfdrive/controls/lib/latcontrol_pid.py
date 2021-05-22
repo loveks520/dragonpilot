@@ -22,7 +22,7 @@ class LatControlPID():
     pid_log.steerAngle = float(CS.steeringAngle)
     pid_log.steerRate = float(CS.steeringRate)
     
-    p_testing_px = False		#testing open	
+    p_testing_px = True		#testing open	
     
     if CS.vEgo < 0.3 or not active:
       output_steer = 0.0
