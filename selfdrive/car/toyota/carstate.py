@@ -5,8 +5,10 @@ from selfdrive.car.interfaces import CarStateBase
 from opendbc.can.parser import CANParser
 from selfdrive.config import Conversions as CV
 from selfdrive.car.toyota.values import CAR, DBC, STEER_THRESHOLD, TSS2_CAR, NO_STOP_TIMER_CAR
-from common.params import Params
+from common.params import Params, put_nonblocking
 
+
+physical_buttons_DF = True
 
 class CarState(CarStateBase):
   def __init__(self, CP):
@@ -16,7 +18,13 @@ class CarState(CarStateBase):
 
     # dp
     self.dp_toyota_zss = Params().get('dp_toyota_zss') == b'1'
-
+    # anre
+    self.read_distance_lines = 0
+    self.v_cruise_pcmactivated = False
+    self.v_cruise_pcmlast = 0
+    self.setspeedoffset = 34
+    self.setspeedcounter = 0
+    
     # All TSS2 car have the accurate sensor
     self.accurate_steer_angle_seen = CP.carFingerprint in TSS2_CAR or CP.carFingerprint in [CAR.LEXUS_ISH] or self.dp_toyota_zss
 
@@ -42,8 +50,7 @@ class CarState(CarStateBase):
       ret.gas = cp.vl["GAS_PEDAL_ALT"]['GAS_PEDAL']
       ret.gasPressed = ret.gas > 1e-5
     else:
-      ret.gas = cp.vl["GAS_PEDAL"]['GAS_PEDAL']    ret.brakeLights = bool(cp.vl["ESP_CONTROL"]['BRAKE_LIGHTS_ACC'] or ret.brakePressed)
-
+      ret.gas = cp.vl["GAS_PEDAL"]['GAS_PEDAL']
       ret.gasPressed = cp.vl["PCM_CRUISE"]['GAS_RELEASED'] == 0
 
     ret.wheelSpeeds.fl = cp.vl["WHEEL_SPEEDS"]['WHEEL_SPEED_FL'] * CV.KPH_TO_MS
@@ -73,6 +80,12 @@ class CarState(CarStateBase):
     else:
       ret.steeringAngle = cp.vl["STEER_ANGLE_SENSOR"]['STEER_ANGLE'] + cp.vl["STEER_ANGLE_SENSOR"]['STEER_FRACTION']
 
+      #Arne Distance button read and write code.
+    if self.read_distance_lines != cp.vl["PCM_CRUISE_SM"]['DISTANCE_LINES'] and physical_buttons_DF:
+      self.read_distance_lines = cp.vl["PCM_CRUISE_SM"]['DISTANCE_LINES']
+      put_nonblocking('dp_dynamic_follow', str(int(max(self.read_distance_lines, 0))))
+      put_nonblocking('dp_last_modified',str(floor(time.time())))  
+      
     ret.steeringRate = cp.vl["STEER_ANGLE_SENSOR"]['STEER_RATE']
     can_gear = int(cp.vl["GEAR_PACKET"]['GEAR'])
     ret.gearShifter = self.parse_gear_shifter(self.shifter_values.get(can_gear, None))
@@ -95,8 +108,67 @@ class CarState(CarStateBase):
       self.low_speed_lockout = False
     else:
       ret.cruiseState.available = cp.vl["PCM_CRUISE_2"]['MAIN_ON'] != 0
-      ret.cruiseState.speed = cp.vl["PCM_CRUISE_2"]['SET_SPEED'] * CV.KPH_TO_MS
+      ret.cruiseState.speed = cp.vl["PCM_CRUISE_2"]['SET_SPEED']
       self.low_speed_lockout = cp.vl["PCM_CRUISE_2"]['LOW_SPEED_LOCKOUT'] == 2
+    #add start-------------------------------------------
+    minimum_set_speed = 41
+    maximum_set_speed = 169#or 169
+    v_cruise_pcm_max = ret.cruiseState.speed
+    if v_cruise_pcm_max < minimum_set_speed and self.pcm_acc_active:
+      minimum_set_speed = v_cruise_pcm_max
+    if v_cruise_pcm_max > maximum_set_speed and self.pcm_acc_active:
+      maximum_set_speed = v_cruise_pcm_max
+    if (self.v_cruise_pcmactivated or (bool(cp.vl["PCM_CRUISE"]['CRUISE_ACTIVE']) and not 
+                                       self.pcm_acc_active)) and self.v_cruise_pcmlast != ret.cruiseState.speed:
+      if ret.vEgo * CV.MS_TO_KPH < minimum_set_speed:
+        self.setspeedoffset = max(min(int(minimum_set_speed - ret.vEgo * CV.MS_TO_KPH),(minimum_set_speed-7.0)),0.0)
+        self.v_cruise_pcmlast = ret.cruiseState.speed
+      else:
+        self.setspeedoffset = 0
+      self.v_cruise_pcmlast = ret.cruiseState.speed
+    if ret.cruiseState.speed < self.v_cruise_pcmlast and (bool(cp.vl["PCM_CRUISE"]['CRUISE_ACTIVE']) and self.pcm_acc_active):
+      if self.setspeedcounter > 0 and ret.cruiseState.speed > minimum_set_speed:
+        self.setspeedoffset = self.setspeedoffset + 4
+      else:
+        if math.floor((int((-ret.cruiseState.speed)*(minimum_set_speed-7.0)/speed_range 
+                           + maximum_set_speed * (minimum_set_speed - 7.0)/speed_range)
+                       - self.setspeedoffset)/(ret.cruiseState.speed - (minimum_set_speed-1.0))) > 0:
+          self.setspeedoffset = self.setspeedoffset + math.floor((int((-ret.cruiseState.speed)*(minimum_set_speed - 7.0)/speed_range
+                                                                      + maximum_set_speed * (minimum_set_speed - 7.0)/speed_range) 
+                                                                  - self.setspeedoffset)/(ret.cruiseState.speed - (minimum_set_speed - 1.0)))
+      self.setspeedcounter = 50
+    if self.v_cruise_pcmlast < ret.cruiseState.speed and (bool(cp.vl["PCM_CRUISE"]['CRUISE_ACTIVE']) and self.pcm_acc_active):
+      if self.setspeedcounter > 0 and (self.setspeedoffset - 4) > 0:
+        self.setspeedoffset = self.setspeedoffset - 4
+      else:
+        self.setspeedoffset = self.setspeedoffset + math.floor((int((-ret.cruiseState.speed) * (minimum_set_speed - 7.0)/speed_range
+                                                                    + maximum_set_speed * (minimum_set_speed - 7.0)/speed_range) 
+                                                                - self.setspeedoffset)/(maximum_set_speed + 1.0 - ret.cruiseState.speed))
+      self.setspeedcounter = 50
+    if self.setspeedcounter > 0:
+      self.setspeedcounter = self.setspeedcounter - 1
+    if bool(cp.vl["PCM_CRUISE"]['CRUISE_ACTIVE']) and not self.pcm_acc_active:
+      self.v_cruise_pcmactivated = True
+    else:
+      self.v_cruise_pcmactivated = False
+    self.v_cruise_pcmlast = ret.cruiseState.speed
+    if ret.cruiseState.speed - self.setspeedoffset < 7:
+      self.setspeedoffset = ret.cruiseState.speed - 7
+    if ret.cruiseState.speed - self.setspeedoffset > maximum_set_speed:
+      self.setspeedoffset = ret.cruiseState.speed - maximum_set_speed
+    ret.cruiseState.speed = min(max(7, ret.cruiseState.speed - self.setspeedoffset),v_cruise_pcm_max) * CV.KPH_TO_MS  
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    #add end-----------------------------------  
     if self.CP.carFingerprint in [CAR.LEXUS_ISH, CAR.LEXUS_GSH]:
       # Lexus ISH does not have CRUISE_STATUS value (always 0), so we use CRUISE_ACTIVE value instead
       self.pcm_acc_status = cp.vl["PCM_CRUISE"]['CRUISE_ACTIVE']
@@ -159,6 +231,7 @@ class CarState(CarStateBase):
       ("LKA_STATE", "EPS_STATUS", 0),
       ("BRAKE_LIGHTS_ACC", "ESP_CONTROL", 0),
       ("AUTO_HIGH_BEAM", "LIGHT_STALK", 0),
+      ("DISTANCE_LINES", "PCM_CRUISE_SM", 0),
     ]
 
     checks = [
