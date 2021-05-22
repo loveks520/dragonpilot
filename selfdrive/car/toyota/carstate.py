@@ -42,7 +42,8 @@ class CarState(CarStateBase):
       ret.gas = cp.vl["GAS_PEDAL_ALT"]['GAS_PEDAL']
       ret.gasPressed = ret.gas > 1e-5
     else:
-      ret.gas = cp.vl["GAS_PEDAL"]['GAS_PEDAL']
+      ret.gas = cp.vl["GAS_PEDAL"]['GAS_PEDAL']    ret.brakeLights = bool(cp.vl["ESP_CONTROL"]['BRAKE_LIGHTS_ACC'] or ret.brakePressed)
+
       ret.gasPressed = cp.vl["PCM_CRUISE"]['GAS_RELEASED'] == 0
 
     ret.wheelSpeeds.fl = cp.vl["WHEEL_SPEEDS"]['WHEEL_SPEED_FL'] * CV.KPH_TO_MS
