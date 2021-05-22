@@ -80,6 +80,7 @@ class LanePlanner:
     offset = self.dp_camera_offset * 0.01 if self.dp_camera_offset != 0 else 0
     self.l_poly[3] += offset
     self.r_poly[3] += offset
+    self.p_poly[3] += offset
     #self.p_poly[3] -= 0.06 #update
 
     # Reduce reliance on lanelines that are too far apart or
