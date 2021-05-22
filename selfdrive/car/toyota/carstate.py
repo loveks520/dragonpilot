@@ -156,6 +156,8 @@ class CarState(CarStateBase):
       self.setspeedoffset = ret.cruiseState.speed - 7
     if ret.cruiseState.speed - self.setspeedoffset > maximum_set_speed:
       self.setspeedoffset = ret.cruiseState.speed - maximum_set_speed
+    if set_speed_offset or travis:
+      self.setspeedoffset = 0.0      
     ret.cruiseState.speed = min(max(7, ret.cruiseState.speed - self.setspeedoffset),v_cruise_pcm_max) * CV.KPH_TO_MS  
       
       
