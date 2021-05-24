@@ -70,7 +70,7 @@ class DynamicFollow:
     self.auto_df_model_data = []
     self._get_live_params()  # so they're defined just in case
 
-  def update(self, CS, libmpc):
+  def update(self, CS, libmpc, dp_dynamic_follow):
     #self._get_live_params()
     if dp_dynamic_follow is not None and 0 < dp_dynamic_follow < 4:
       self.dp_dynamic_follow = dp_dynamic_follow
