@@ -6,7 +6,7 @@ from opendbc.can.parser import CANParser
 from selfdrive.config import Conversions as CV
 from selfdrive.car.toyota.values import CAR, DBC, STEER_THRESHOLD, TSS2_CAR, NO_STOP_TIMER_CAR
 from common.params import Params, put_nonblocking
-from common.travis_checker import travis
+#from common.travis_checker import travis
 
 physical_buttons_DF = True
 
@@ -156,8 +156,8 @@ class CarState(CarStateBase):
       self.setspeedoffset = ret.cruiseState.speed - 7
     if ret.cruiseState.speed - self.setspeedoffset > maximum_set_speed:
       self.setspeedoffset = ret.cruiseState.speed - maximum_set_speed
-    if set_speed_offset or travis:
-      self.setspeedoffset = 0.0      
+    #if set_speed_offset or travis:
+    # self.setspeedoffset = 0.0      
     ret.cruiseState.speed = min(max(7, ret.cruiseState.speed - self.setspeedoffset),v_cruise_pcm_max) * CV.KPH_TO_MS  
       
       
