@@ -169,7 +169,26 @@ def thermald_thread():
   no_panda_cnt = 0
 
   thermal_config = HARDWARE.get_thermal_config()
+  # dp
+  dp_temp_monitor = True
+  dp_last_modified_temp_monitor = None
 
+  dp_debug = False
+  dp_last_modified_debug = None
+
+  dp_auto_shutdown = False
+  dp_last_modified_auto_shutdown = None
+
+  dp_auto_shutdown_in = 90
+  dp_last_modified_auto_shutdown_in = None
+
+  dp_allow_shutdown = False
+  dp_allow_shutdown_last = True
+
+  modified = None
+  last_modified = None
+  last_modified_check = None
+  
   # CPR3 logging
   if EON:
     base_path = "/sys/kernel/debug/cpr3-regulator/"
@@ -285,46 +304,6 @@ def thermald_thread():
 
     # **** starting logic ****
 
-    # Check for last update time and display alerts if needed
-    now = datetime.datetime.utcnow()
-
-    # show invalid date/time alert
-    startup_conditions["time_valid"] = (now.year > 2020) or (now.year == 2020 and now.month >= 10)
-    set_offroad_alert_if_changed("Offroad_InvalidTime", (not startup_conditions["time_valid"]))
-
-    # Show update prompt
-    try:
-      last_update = datetime.datetime.fromisoformat(params.get("LastUpdateTime", encoding='utf8'))
-    except (TypeError, ValueError):
-      last_update = now
-    dt = now - last_update
-
-    update_failed_count = params.get("UpdateFailedCount")
-    update_failed_count = 0 if update_failed_count is None else int(update_failed_count)
-    last_update_exception = params.get("LastUpdateException", encoding='utf8')
-
-    if update_failed_count > 15 and last_update_exception is not None:
-      if current_branch in ["release2", "dashcam"]:
-        extra_text = "Ensure the software is correctly installed"
-      else:
-        extra_text = last_update_exception
-
-      set_offroad_alert_if_changed("Offroad_ConnectivityNeeded", False)
-      set_offroad_alert_if_changed("Offroad_ConnectivityNeededPrompt", False)
-      set_offroad_alert_if_changed("Offroad_UpdateFailed", True, extra_text=extra_text)
-    elif dt.days > DAYS_NO_CONNECTIVITY_MAX and update_failed_count > 1:
-      set_offroad_alert_if_changed("Offroad_UpdateFailed", False)
-      set_offroad_alert_if_changed("Offroad_ConnectivityNeededPrompt", False)
-      set_offroad_alert_if_changed("Offroad_ConnectivityNeeded", True)
-    elif dt.days > DAYS_NO_CONNECTIVITY_PROMPT:
-      remaining_time = str(max(DAYS_NO_CONNECTIVITY_MAX - dt.days, 0))
-      set_offroad_alert_if_changed("Offroad_UpdateFailed", False)
-      set_offroad_alert_if_changed("Offroad_ConnectivityNeeded", False)
-      set_offroad_alert_if_changed("Offroad_ConnectivityNeededPrompt", True, extra_text=f"{remaining_time} days.")
-    else:
-      set_offroad_alert_if_changed("Offroad_UpdateFailed", False)
-      set_offroad_alert_if_changed("Offroad_ConnectivityNeeded", False)
-      set_offroad_alert_if_changed("Offroad_ConnectivityNeededPrompt", False)
 
     startup_conditions["up_to_date"] = params.get("Offroad_ConnectivityNeeded") is None or params.get_bool("DisableUpdates")
     startup_conditions["not_uninstalling"] = not params.get_bool("DoUninstall")
@@ -382,6 +361,33 @@ def thermald_thread():
       time.sleep(10)
       HARDWARE.shutdown()
 
+    # dp
+    if pandaState is None and msg.deviceState.usbOnline:
+      # happen when boot up without panda connected
+      dp_allow_shutdown = False
+    elif pandaState is not None and msg.deviceState.usbOnline and pandaState.pandaState.pandaType == log.PandaState.PandaType.unknown:
+      # happen when panda was there and gone
+      dp_allow_shutdown = False
+    else:
+      dp_allow_shutdown = True
+
+    # if allow shutdown status change, we reset off_ts
+    if dp_allow_shutdown != dp_allow_shutdown_last and off_ts is not None:
+      off_ts = sec_since_boot()
+      dp_allow_shutdown_last = dp_allow_shutdown
+
+    if dp_allow_shutdown and off_ts is not None and dp_auto_shutdown and sec_since_boot() - off_ts >= dp_auto_shutdown_in * 60:
+      msg.deviceState.chargingDisabled = True
+      shutdown = False
+      if pandaState is not None:
+        if pandaState.pandaState.usbPowerMode in [log.PandaState.UsbPowerMode.client, log.PandaState.UsbPowerMode.none]:
+          shutdown = True
+      else:
+        shutdown = True
+      if shutdown:
+        time.sleep(10)
+        HARDWARE.shutdown()
+      
     # If UI has crashed, set the brightness to reasonable non-zero value
     manager_state = messaging.recv_one_or_none(managerState_sock)
     if manager_state is not None:
