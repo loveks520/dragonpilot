@@ -1,6 +1,7 @@
 from cereal import log
 from common.numpy_fast import clip, interp
 from selfdrive.controls.lib.pid import PIController
+from common.params import Params
 from selfdrive.controls.lib.dynamic_gas import DynamicGas
 
 LongCtrlState = log.ControlsState.LongControlState
