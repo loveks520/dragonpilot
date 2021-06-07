@@ -63,7 +63,7 @@ class LongControl():
     self.v_pid = 0.0
     self.last_output_gb = 0.0
     #dynamic_gas
-    self.dp_dynamic_gas = True
+    self.dp_dynamic_gas = (params.get('dp_dynamic_gas') == b'1')
     if self.dp_dynamic_gas:
       self.dynamic_gas = DynamicGas(CP)
     
