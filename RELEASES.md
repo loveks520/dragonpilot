@@ -1,4 +1,4 @@
-Version 0.8.4 (2021-05-17)
+Version 0.8.4 (2021-05-17)1
 ========================
  * Delay controls start until system is ready
  * Fuzzy car identification, enabled with Community Features toggle
