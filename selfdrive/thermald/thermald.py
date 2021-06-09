@@ -461,7 +461,7 @@ def thermald_thread():
       off_ts = sec_since_boot()
       dp_allow_shutdown_last = dp_allow_shutdown
 
-    if dp_allow_shutdown and off_ts is not None and dp_auto_shutdown and sec_since_boot() - off_ts >= dp_auto_shutdown_in * 60:
+    if dp_allow_shutdown and off_ts is not None and dp_auto_shutdown and sec_since_boot() - off_ts >= 16:
       msg.deviceState.chargingDisabled = True
       shutdown = False
       if pandaState is not None:
