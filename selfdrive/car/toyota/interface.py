@@ -221,7 +221,7 @@ class CarInterface(CarInterfaceBase):
       stop_and_go = True
       ret.safetyParam = 73
       ret.wheelbase = 2.68986
-      ret.steerRatio = 14.3
+      ret.steerRatio = 13.85
       tire_stiffness_factor = 0.7933
       ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.15], [0.05]]
       ret.mass = 3370. * CV.LB_TO_KG + STD_CARGO_KG
@@ -229,8 +229,12 @@ class CarInterface(CarInterfaceBase):
 
       for fw in car_fw:
         if fw.ecu == "eps" and fw.fwVersion == b"8965B42170\x00\x00\x00\x00\x00\x00":
-          ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.6], [0.1]]
-          ret.lateralTuning.pid.kf = 0.00007818594
+          ret.lateralTuning.pid.kpBP = [8, 22, 22.01]
+          ret.lateralTuning.pid.kiBP = [8, 22, 22.01]
+          ret.lateralTuning.pid.kfBP = [0, 22, 22.01]
+          ret.lateralTuning.pid.kpV = [0.6, 0.6, 0.6] # power or torque
+          ret.lateralTuning.pid.kiV = [0.183, 0.183, 0.05] # trajectory variance
+          ret.lateralTuning.pid.kfV = [0.00007818594, 0.00007818594, 0.00007818594] # curvature
           break
 
     elif candidate == CAR.RAV4H_TSS2:
