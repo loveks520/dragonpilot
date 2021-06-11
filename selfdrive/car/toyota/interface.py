@@ -44,12 +44,12 @@ class CarInterface(CarInterfaceBase):
       ret.longitudinalTuning.deadzoneBP = [0., 8.05]
       ret.longitudinalTuning.deadzoneV = [.0, .14]
       ret.longitudinalTuning.kpBP = [0., 5., 20.]
-      ret.longitudinalTuning.kpV = [1.3, 1.0, 0.7]
+      ret.longitudinalTuning.kpV = [1.2, 0.99, 0.77]
       ret.longitudinalTuning.kiBP = [0., 5., 12., 20., 27.]
-      ret.longitudinalTuning.kiV = [.35, .23, .20, .17, .1]
-      ret.stoppingBrakeRate = 0.1 # reach stopping target smoothly
-      ret.startingBrakeRate = 2.0 # release brakes fast
-      ret.startAccel = 1.2 # Accelerate from 0 faster
+      ret.longitudinalTuning.kiV = [.2, .2, .2, .18, .12]
+      ret.stoppingBrakeRate = 0.09 # reach stopping target smoothly
+      ret.startingBrakeRate = 1.05 # release brakes fast
+      ret.startAccel = 1.50 # Accelerate from 0 faster
     else:
       # Default longitudinal tune
       ret.longitudinalTuning.deadzoneBP = [0., 9.]
@@ -223,8 +223,17 @@ class CarInterface(CarInterfaceBase):
       ret.wheelbase = 2.68986
       ret.steerRatio = 13.85
       tire_stiffness_factor = 0.7933
-      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.15], [0.05]]
       ret.mass = 3370. * CV.LB_TO_KG + STD_CARGO_KG
+      ret.longitudinalTuning.deadzoneBP = [0., 8.05]
+      ret.longitudinalTuning.deadzoneV = [.0, .14]
+      ret.longitudinalTuning.kpBP = [0., 5., 20.]
+      ret.longitudinalTuning.kpV = [1.2, 0.99, 0.77]
+      ret.longitudinalTuning.kiBP = [0., 5., 12., 20., 27.]
+      ret.longitudinalTuning.kiV = [.2, .2, .2, .18, .12]
+      ret.stoppingBrakeRate = 0.09 # reach stopping target smoothly
+      ret.startingBrakeRate = 1.05 # release brakes fast
+      ret.startAccel = 1.50 # Accelerate from 0 faster
+      ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.15], [0.05]]
       ret.lateralTuning.pid.kf = 0.00004
 
       for fw in car_fw:
