@@ -401,8 +401,8 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
 
   EventName.promptDriverUnresponsive: {
     ET.WARNING: Alert(
-      _("TOUCH STEERING WHEEL"),
-      _("Driver Unresponsive"),
+      _("請馬上碰觸方向盤"),
+      _("駕駛無反應"),
       AlertStatus.userPrompt, AlertSize.mid,
       Priority.MID, VisualAlert.steerRequired, AudibleAlert.chimeWarning2Repeat, .1, .1, .1),
   },
@@ -489,8 +489,8 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
 
   EventName.laneChange: {
     ET.WARNING: Alert(
-      _("Changing Lane"),
-      _("Monitor Other Vehicles"),
+      _("換道"),
+      _("注意其他車輛"),
       AlertStatus.normal, AlertSize.mid,
       Priority.LOW, VisualAlert.steerRequired, AudibleAlert.none, .0, .1, .1),
   },
@@ -517,7 +517,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
 
   EventName.speedLimitActive: {
     ET.WARNING: Alert(
-      "Cruise set to speed limit",
+      "已定速至設定速度",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimePrompt, 1., 0., 2.),
@@ -525,7 +525,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
 
   EventName.speedLimitDecrease: {
     ET.WARNING: Alert(
-      "Decreasing speed to match new speed limit",
+      "正在減速至新設定速度",
       "",
       AlertStatus.normal, AlertSize.small,
       Priority.LOW, VisualAlert.none, AudibleAlert.chimePrompt, 1., 0., 2.),
@@ -877,7 +877,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
   },
   EventName.longControlDisabled: {
     ET.PERMANENT: Alert(
-      _("方向盤輔助作動中"),
+      _("方向盤輔助持續中"),
       _(""),
       AlertStatus.normal, AlertSize.small,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none,.4, 2., 0.2),
