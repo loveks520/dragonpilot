@@ -877,7 +877,7 @@ EVENTS: Dict[int, Dict[str, Union[Alert, Callable[[Any, messaging.SubMaster, boo
   },
   EventName.longControlDisabled: {
     ET.PERMANENT: Alert(
-      _("Steer Assist Active"),
+      _("方向盤輔助作動中"),
       _(""),
       AlertStatus.normal, AlertSize.small,
       Priority.LOWER, VisualAlert.none, AudibleAlert.none,.4, 2., 0.2),
