@@ -231,12 +231,10 @@ class CarInterface(CarInterfaceBase):
         if fw.ecu == "eps" and fw.fwVersion == b"8965B42170\x00\x00\x00\x00\x00\x00":
           ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.6], [0.1]]
           ret.lateralTuning.pid.kf = 0.00007818594
-          #ret.lateralTuning.pid.kpBP = [8, 22, 22.01]
-          #ret.lateralTuning.pid.kiBP = [8, 22, 22.01]
-          #ret.lateralTuning.pid.kfBP = [0, 22, 22.01]
-          #ret.lateralTuning.pid.kpV = [0.6, 0.6, 0.6] # power or torque
-          #ret.lateralTuning.pid.kiV = [0.183, 0.183, 0.05] # trajectory variance
-          #ret.lateralTuning.pid.kfV = [0.00007818594, 0.00007818594, 0.00007818594] # curvature
+          ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0, 22, 22.01], [0, 22, 22.01]]
+          ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.6, 0.6, 0.6], [0.183, 0.183, 0.05]] 
+          #ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0., 27.], [0., 27.]]
+          #ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.3, 0.6], [0.05, 0.03]]
           break
 
     elif candidate == CAR.RAV4H_TSS2:
