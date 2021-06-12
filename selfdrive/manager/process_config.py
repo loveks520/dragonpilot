@@ -10,7 +10,7 @@ procs = [
   # due to qualcomm kernel bugs SIGKILLing camerad sometimes causes page table corruption
   NativeProcess("camerad", "selfdrive/camerad", ["./camerad"], unkillable=True, driverview=True),
   NativeProcess("clocksd", "selfdrive/clocksd", ["./clocksd"]),
-  NativeProcess("dmonitoringmodeld", "selfdrive/modeld", ["./dmonitoringmodeld"], enabled=(not (PC or JETSON) or WEBCAM), driverview=True),
+  #NativeProcess("dmonitoringmodeld", "selfdrive/modeld", ["./dmonitoringmodeld"], enabled=(not (PC or JETSON) or WEBCAM), driverview=True),
   NativeProcess("logcatd", "selfdrive/logcatd", ["./logcatd"], enabled=not JETSON),
   NativeProcess("loggerd", "selfdrive/loggerd", ["./loggerd"], enabled=not JETSON),
   NativeProcess("modeld", "selfdrive/modeld", ["./modeld"]),
@@ -22,7 +22,7 @@ procs = [
   PythonProcess("calibrationd", "selfdrive.locationd.calibrationd"),
   PythonProcess("controlsd", "selfdrive.controls.controlsd"),
   PythonProcess("deleter", "selfdrive.loggerd.deleter", persistent=True),
-  PythonProcess("dmonitoringd", "selfdrive.monitoring.dmonitoringd", enabled=(not (PC or JETSON) or WEBCAM), driverview=True),
+  #PythonProcess("dmonitoringd", "selfdrive.monitoring.dmonitoringd", enabled=(not (PC or JETSON) or WEBCAM), driverview=True),
   PythonProcess("logmessaged", "selfdrive.logmessaged", enabled=not JETSON, persistent=True),
   PythonProcess("pandad", "selfdrive.pandad", persistent=True),
   PythonProcess("paramsd", "selfdrive.locationd.paramsd"),
