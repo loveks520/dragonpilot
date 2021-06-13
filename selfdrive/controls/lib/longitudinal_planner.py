@@ -29,7 +29,7 @@ _A_CRUISE_MIN_BP = [  0.,  5.,  10., 20.,  40.]
 
 # need fast accel at very low speed for stop and go
 # make sure these accelerations are smaller than mpc limits
-_A_CRUISE_MAX_V = [1.6, 1.2, 0.65, .4]
+_A_CRUISE_MAX_V = [1.2, 1.2, 0.65, .4]
 _A_CRUISE_MAX_V_FOLLOWING = [1.6, 1.6, 0.65, .4]
 _A_CRUISE_MAX_BP = [0.,  6.4, 22.5, 40.]
 
@@ -50,15 +50,15 @@ DP_ACCEL_NORMAL = 1
 DP_ACCEL_SPORT = 2
 
 # accel profile by @arne182
-_DP_CRUISE_MIN_V = [-3.0, -2.5, -2.0, -1.0, -0.5]
-_DP_CRUISE_MIN_V_ECO = [-2.0, -1.5, -1.0, -0.5, -0.3]
-_DP_CRUISE_MIN_V_SPORT = [-3.0, -3.0, -2.5, -2.0, -1.5]
-_DP_CRUISE_MIN_V_FOLLOWING = [-3.0, -2.5, -2.0, -1.5, -1.5]
+_DP_CRUISE_MIN_V = [-2.0, -1.5, -1.0, -0.7, -0.5]
+_DP_CRUISE_MIN_V_ECO = [-1.0, -0.7, -0.6, -0.5, -0.3]
+_DP_CRUISE_MIN_V_SPORT = [-3.0, -2.6, -2.3, -2.0, -1.0]
+_DP_CRUISE_MIN_V_FOLLOWING = [-4.0, -4.0, -3.5, -2.5, -2.0]
 _DP_CRUISE_MIN_BP = [0.0, 5.0, 10.0, 20.0, 55.0]
 
-_DP_CRUISE_MAX_V = [2.5, 1.6, 1.3, .65, .18]
-_DP_CRUISE_MAX_V_ECO = [2.0, 1.3, 0.85, 0.4, 0.11]
-_DP_CRUISE_MAX_V_SPORT = [3.5, 3.0, 2.5, 2.0, 1.4]
+_DP_CRUISE_MAX_V = [3.0, 1.6, 1.3, .65, .18]
+_DP_CRUISE_MAX_V_ECO = [3.0, 1.3, 0.85, 0.4, 0.11]
+_DP_CRUISE_MAX_V_SPORT = [3.0, 3.0, 2.5, 2.0, 1.4]
 _DP_CRUISE_MAX_V_FOLLOWING = [3.0, 2.3, 1.4, 0.9, 0.5]
 _DP_CRUISE_MAX_BP = [0., 5., 10., 20., 55.]
 
