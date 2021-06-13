@@ -7,7 +7,7 @@ V_CRUISE_MAX = 169
 V_CRUISE_MIN = 7
 V_CRUISE_DELTA = 7
 V_CRUISE_ENABLE_MIN = 7
-MPC_N = 16
+MPC_N = 16  #MPC = model predictive control
 CAR_ROTATION_RADIUS = 0.0
 
 class MPC_COST_LAT:
