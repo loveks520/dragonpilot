@@ -12,7 +12,7 @@ procs = [
   NativeProcess("clocksd", "selfdrive/clocksd", ["./clocksd"]),
   #NativeProcess("dmonitoringmodeld", "selfdrive/modeld", ["./dmonitoringmodeld"], enabled=(not (PC or JETSON) or WEBCAM), driverview=True),
   NativeProcess("logcatd", "selfdrive/logcatd", ["./logcatd"], enabled=not JETSON),
-  NativeProcess("loggerd", "selfdrive/loggerd", ["./loggerd"], enabled=not JETSON),
+  #NativeProcess("loggerd", "selfdrive/loggerd", ["./loggerd"], enabled=not JETSON),
   NativeProcess("modeld", "selfdrive/modeld", ["./modeld"]),
   NativeProcess("proclogd", "selfdrive/proclogd", ["./proclogd"], enabled=not JETSON),
   NativeProcess("sensord", "selfdrive/sensord", ["./sensord"], enabled=not (PC or JETSON), persistent=EON, sigkill=EON),
@@ -33,7 +33,7 @@ procs = [
   PythonProcess("timezoned", "selfdrive.timezoned", enabled=TICI, persistent=True),
   PythonProcess("tombstoned", "selfdrive.tombstoned", enabled=not (PC or JETSON), persistent=True),
   PythonProcess("updated", "selfdrive.updated", enabled=not (PC or JETSON), persistent=True),
-  PythonProcess("uploader", "selfdrive.loggerd.uploader", enabled=not JETSON, persistent=True),
+  #PythonProcess("uploader", "selfdrive.loggerd.uploader", enabled=not JETSON, persistent=True),
   PythonProcess("systemd", "selfdrive.dragonpilot.systemd", persistent=True),
 ]
 
