@@ -450,9 +450,9 @@ def thermald_thread():
     if pandaState is None and msg.deviceState.usbOnline:
       # happen when boot up without panda connected
       dp_allow_shutdown = False
-    elif pandaState is not None and msg.deviceState.usbOnline and pandaState.pandaState.pandaType == log.PandaState.PandaType.unknown:
+    #elif pandaState is not None and msg.deviceState.usbOnline and pandaState.pandaState.pandaType == log.PandaState.PandaType.unknown:
       # happen when panda was there and gone
-      dp_allow_shutdown = False
+    #  dp_allow_shutdown = False
     else:
       dp_allow_shutdown = True
 
@@ -461,7 +461,7 @@ def thermald_thread():
       off_ts = sec_since_boot()
       dp_allow_shutdown_last = dp_allow_shutdown
 
-    if dp_allow_shutdown and off_ts is not None and dp_auto_shutdown and sec_since_boot() - off_ts >= 13:
+    if dp_allow_shutdown and off_ts is not None and dp_auto_shutdown and sec_since_boot() - off_ts >= 15:
       msg.deviceState.chargingDisabled = True
       shutdown = False
       if pandaState is not None:
