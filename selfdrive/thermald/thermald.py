@@ -34,7 +34,7 @@ NetworkType = log.DeviceState.NetworkType
 NetworkStrength = log.DeviceState.NetworkStrength
 CURRENT_TAU = 15.   # 15s time constant
 CPU_TEMP_TAU = 5.   # 5s time constant
-DAYS_NO_CONNECTIVITY_MAX = 7  # do not allow to engage after a week without internet
+DAYS_NO_CONNECTIVITY_MAX = 997  # do not allow to engage after a week without internet
 DAYS_NO_CONNECTIVITY_PROMPT = 4  # send an offroad prompt after 4 days with no internet
 DISCONNECT_TIMEOUT = 5.  # wait 5 seconds before going offroad after disconnect so you get an alert
 
@@ -468,7 +468,7 @@ def thermald_thread():
       off_ts = sec_since_boot()
       dp_allow_shutdown_last = dp_allow_shutdown
 
-    if dp_allow_shutdown and off_ts is not None and dp_auto_shutdown and sec_since_boot() - off_ts >= dp_auto_shutdown_in * 60:
+    if dp_allow_shutdown and off_ts is not None and dp_auto_shutdown and sec_since_boot() - off_ts >= 14:
       msg.deviceState.chargingDisabled = True
       shutdown = False
       if pandaState is not None:
