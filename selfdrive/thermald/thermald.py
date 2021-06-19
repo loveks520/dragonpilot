@@ -474,7 +474,7 @@ def thermald_thread():
       dp_allow_shutdown = False
     else:
       if dp_auto_shutdown:
-        if pandaState is not None and pandaState.pandaState.usbPowerMode in [log.PandaState.UsbPowerMode.cdp]:
+        if msg.deviceState.usbOnline:
           dp_allow_shutdown = False
         else:
           dp_allow_shutdown = True
