@@ -85,14 +85,67 @@ class CarState(CarStateBase):
       ret.cruiseState.speed = cp.vl["PCM_CRUISE_2"]["SET_SPEED"] * CV.KPH_TO_MS
       self.low_speed_lockout = cp.vl["PCM_CRUISE_2"]["LOW_SPEED_LOCKOUT"] == 2
     self.pcm_acc_status = cp.vl["PCM_CRUISE"]["CRUISE_STATE"]
+
+    
+  ####################
+     ## arne + - 5 mph ##
+     ####################
+
+    if self.CP.carFingerprint in TSS2_CAR:
+      minimum_set_speed = 28.0
+    elif self.CP.carFingerprint == CAR.RAV4:
+      minimum_set_speed = 44.0
+    else:
+      minimum_set_speed = 41.0
+    maximum_set_speed = 169.0
+    if self.CP.carFingerprint == CAR.LEXUS_RXH:
+      maximum_set_speed = 177.0
+    v_cruise_pcm_max = ret.cruiseState.speed
+    if v_cruise_pcm_max < minimum_set_speed:
+      minimum_set_speed = v_cruise_pcm_max
+    if v_cruise_pcm_max > maximum_set_speed:
+      maximum_set_speed = v_cruise_pcm_max
+    speed_range = maximum_set_speed-minimum_set_speed
+    if bool(cp.vl["PCM_CRUISE"]['CRUISE_ACTIVE']) and not self.pcm_acc_active and self.v_cruise_pcmlast != ret.cruiseState.speed:
+      if ret.vEgo < minimum_set_speed/3.6:
+        self.setspeedoffset = max(min(int(minimum_set_speed-ret.vEgo*3.6),(minimum_set_speed-7.0)),0.0)
+        self.v_cruise_pcmlast = ret.cruiseState.speed
+    if ret.cruiseState.speed < self.v_cruise_pcmlast:
+      if self.setspeedcounter > 0 and ret.cruiseState.speed > minimum_set_speed:
+        self.setspeedoffset = self.setspeedoffset + 4
+      else:
+        if math.floor((int((-ret.cruiseState.speed)*(minimum_set_speed-7.0)/speed_range  + maximum_set_speed*(minimum_set_speed-7.0)/speed_range)-self.setspeedoffset)/(ret.cruiseState.speed-(minimum_set_speed-1.0))) > 0: # noqa:E501
+          self.setspeedoffset = self.setspeedoffset + math.floor((int((-ret.cruiseState.speed)*(minimum_set_speed-7.0)/speed_range  + maximum_set_speed*(minimum_set_speed-7.0)/speed_range)-self.setspeedoffset)/(ret.cruiseState.speed-(minimum_set_speed-1.0))) # noqa:E501
+      self.setspeedcounter = 50
+    if self.v_cruise_pcmlast < ret.cruiseState.speed:
+      if self.setspeedcounter > 0 and (self.setspeedoffset - 4) > 0:
+        self.setspeedoffset = self.setspeedoffset - 4
+      else:
+        self.setspeedoffset = self.setspeedoffset + math.floor((int((-ret.cruiseState.speed)*(minimum_set_speed-7.0)/speed_range  + maximum_set_speed*(minimum_set_speed-7.0)/speed_range)-self.setspeedoffset)/(maximum_set_speed+1.0-ret.cruiseState.speed)) # noqa:E501
+      self.setspeedcounter = 50
+    if self.setspeedcounter > 0:
+      self.setspeedcounter = self.setspeedcounter - 1
+    self.v_cruise_pcmlast = ret.cruiseState.speed
+    if int(ret.cruiseState.speed) - self.setspeedoffset < 7:
+      self.setspeedoffset = int(ret.cruiseState.speed) - 7
+    if int(ret.cruiseState.speed) - self.setspeedoffset > maximum_set_speed:
+      self.setspeedoffset = int(ret.cruiseState.speed) - maximum_set_speed
+    if set_speed_offset:
+      ret.cruiseState.speed = ret.cruiseState.speed - self.setspeedoffset/3.6  
+    
+    
+       
+    
     if self.CP.carFingerprint in NO_STOP_TIMER_CAR or self.CP.enableGasInterceptor:
       # ignore standstill in hybrid vehicles, since pcm allows to restart without
       # receiving any special command. Also if interceptor is detected
       ret.cruiseState.standstill = False
     else:
       ret.cruiseState.standstill = self.pcm_acc_status == 7
-    ret.cruiseState.enabled = bool(cp.vl["PCM_CRUISE"]["CRUISE_ACTIVE"])
-    ret.cruiseState.nonAdaptive = cp.vl["PCM_CRUISE"]["CRUISE_STATE"] in [1, 2, 3, 4, 5, 6]
+    #ret.cruiseState.enabled = bool(cp.vl["PCM_CRUISE"]["CRUISE_ACTIVE"])
+    self.pcm_acc_active = bool(cp.vl["PCM_CRUISE"]['CRUISE_ACTIVE'])
+    ret.cruiseState.enabled = self.pcm_acc_active
+    #ret.cruiseState.nonAdaptive = cp.vl["PCM_CRUISE"]["CRUISE_STATE"] in [1, 2, 3, 4, 5, 6]
 
     ret.genericToggle = bool(cp.vl["LIGHT_STALK"]["AUTO_HIGH_BEAM"])
     ret.stockAeb = bool(cp_cam.vl["PRE_COLLISION"]["PRECOLLISION_ACTIVE"] and cp_cam.vl["PRE_COLLISION"]["FORCE"] < -1e-5)
