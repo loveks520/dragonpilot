@@ -7,16 +7,8 @@ from common.realtime import sec_since_boot
 from selfdrive.controls.lib.radar_helpers import _LEAD_ACCEL_TAU
 from selfdrive.controls.lib.longitudinal_mpc import libmpc_py
 from selfdrive.controls.lib.drive_helpers import MPC_COST_LONG
-#新增動態車距
-from selfdrive.controls.lib.following_distance import TR_DEFAULT, FollowingDistance
 
 LOG_MPC = os.environ.get('LOG_MPC', False)
-
-# 是否启用了跟车距离按钮
-tr_btn_enabled = True
-# 停车后距离前车的距离（米）
-STOPPING_DISTANCE = 4
-STOPPING_DISTANCE = STOPPING_DISTANCE if STOPPING_DISTANCE >= 2 else 2
 
 class LongitudinalMpc():
   def __init__(self, mpc_id):
@@ -75,8 +67,7 @@ class LongitudinalMpc():
     self.cur_state[0].x_ego = 0.0
 
     if lead is not None and lead.status:
-      x_lead = max(0, lead.dRel - (STOPPING_DISTANCE - 4))
-      #修改
+      x_lead = lead.dRel
       v_lead = max(0.0, lead.vLead)
       a_lead = lead.aLeadK
 
@@ -104,10 +95,8 @@ class LongitudinalMpc():
 
     # Calculate mpc
     t = sec_since_boot()
-    #self.n_its = self.libmpc.run_mpc(self.cur_state, self.mpc_solution, self.a_lead_tau, a_lead, dp_following_distance)
-    TR = self.following_distance.update(v_ego, v_lead) if tr_btn_enabled else TR_DEFAULT
-    self.n_its = self.libmpc.run_mpc(self.cur_state, self.mpc_solution, self.a_lead_tau, a_lead, TR)
-    #新增動態車距
+    self.n_its = self.libmpc.run_mpc(self.cur_state, self.mpc_solution, self.a_lead_tau, a_lead, dp_following_distance)
+    
     self.duration = int((sec_since_boot() - t) * 1e9)
 
     # Get solution. MPC timestep is 0.2 s, so interpolation to 0.05 s is needed
