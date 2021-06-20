@@ -10,6 +10,7 @@ from selfdrive.controls.lib.drive_helpers import MPC_COST_LONG
 
 LOG_MPC = os.environ.get('LOG_MPC', False)
 
+
 class LongitudinalMpc():
   def __init__(self, mpc_id):
     self.mpc_id = mpc_id
@@ -26,9 +27,7 @@ class LongitudinalMpc():
     self.last_cloudlog_t = 0.0
     self.n_its = 0
     self.duration = 0
-    
-    self.following_distance = FollowingDistance(self.libmpc)
-    #新增動態車距
+
   def publish(self, pm):
     if LOG_MPC:
       qp_iterations = max(0, self.n_its)
@@ -96,7 +95,6 @@ class LongitudinalMpc():
     # Calculate mpc
     t = sec_since_boot()
     self.n_its = self.libmpc.run_mpc(self.cur_state, self.mpc_solution, self.a_lead_tau, a_lead, dp_following_distance)
-    
     self.duration = int((sec_since_boot() - t) * 1e9)
 
     # Get solution. MPC timestep is 0.2 s, so interpolation to 0.05 s is needed
