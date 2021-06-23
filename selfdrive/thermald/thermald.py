@@ -30,7 +30,7 @@ NetworkType = log.DeviceState.NetworkType
 NetworkStrength = log.DeviceState.NetworkStrength
 CURRENT_TAU = 15.   # 15s time constant
 CPU_TEMP_TAU = 5.   # 5s time constant
-DAYS_NO_CONNECTIVITY_MAX = 997  # do not allow to engage after a week without internet
+DAYS_NO_CONNECTIVITY_MAX = 7  # do not allow to engage after a week without internet
 DAYS_NO_CONNECTIVITY_PROMPT = 4  # send an offroad prompt after 4 days with no internet
 DISCONNECT_TIMEOUT = 5.  # wait 5 seconds before going offroad after disconnect so you get an alert
 
@@ -450,9 +450,9 @@ def thermald_thread():
     if pandaState is None and msg.deviceState.usbOnline:
       # happen when boot up without panda connected
       dp_allow_shutdown = False
-    #elif pandaState is not None and msg.deviceState.usbOnline and pandaState.pandaState.pandaType == log.PandaState.PandaType.unknown:
-      # happen when panda was there and gone
-    #  dp_allow_shutdown = False
+    elif pandaState is not None and msg.deviceState.usbOnline and pandaState.pandaState.pandaType == log.PandaState.PandaType.unknown:
+       happen when panda was there and gone
+      dp_allow_shutdown = False
     else:
       dp_allow_shutdown = True
 
