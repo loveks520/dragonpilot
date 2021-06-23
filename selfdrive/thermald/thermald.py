@@ -485,7 +485,7 @@ def thermald_thread():
         off_ts = sec_since_boot()
         dp_allow_shutdown_last = dp_allow_shutdown
 
-      if sec_since_boot() - off_ts >= 14:
+      if sec_since_boot() - off_ts >= 10:
         msg.deviceState.chargingDisabled = True
         time.sleep(1)
         os.system('LD_LIBRARY_PATH="" svc power shutdown')
