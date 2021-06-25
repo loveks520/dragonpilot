@@ -20,6 +20,9 @@ class CarState(CarStateBase):
     self.accurate_steer_angle_seen = False
     self.angle_offset = 0.
     # dp
+    self.setspeedoffset = 34.0
+    self.setspeedcounter = 0
+    
     self.dp_toyota_zss = Params().get('dp_toyota_zss') == b'1'
 
   def update(self, cp, cp_cam):
