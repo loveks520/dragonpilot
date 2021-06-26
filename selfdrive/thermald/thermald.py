@@ -452,7 +452,9 @@ def thermald_thread():
     else:
       if startup_conditions["ignition"] and (startup_conditions != startup_conditions_prev):
         cloudlog.event("Startup blocked", startup_conditions=startup_conditions)
-
+      if should_start_prev or (count == 0):
+        params.put("IsOffroad", "1")
+        
       started_ts = None
       if off_ts is None:
         off_ts = sec_since_boot()
