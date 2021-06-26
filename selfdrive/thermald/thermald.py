@@ -470,7 +470,8 @@ def thermald_thread():
       HARDWARE.shutdown()
 
     # dp
-    if should_start:
+    #if should_start:
+    if not dp_auto_shutdown:
       dp_allow_shutdown = False
     else:
       if dp_auto_shutdown:
