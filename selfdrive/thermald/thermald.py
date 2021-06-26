@@ -442,6 +442,9 @@ def thermald_thread():
         os.system(f"nmcli radio wwan {fxn}")
 
     if should_start:
+      if not should_start_prev:
+        params.delete("IsOffroad")
+      
       off_ts = None
       if started_ts is None:
         started_ts = sec_since_boot()
