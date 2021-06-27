@@ -344,10 +344,10 @@ def thermald_thread():
     # since going onroad increases load and can make temps go over 107
     # We only do this if there is a relay that prevents the car from faulting
     is_offroad_for_5_min = (started_ts is None) and ((not started_seen) or (off_ts is None) or (sec_since_boot() - off_ts > 60 * 5))
-    if max_cpu_temp > 107. or bat_temp >= 66. or (is_offroad_for_5_min and max_cpu_temp > 70.0):
+    if max_cpu_temp > 107. or bat_temp >= 63. or (is_offroad_for_5_min and max_cpu_temp > 70.0):
       # onroad not allowed
       thermal_status = ThermalStatus.danger
-    elif max_comp_temp > 96.0 or bat_temp > 65.:
+    elif max_comp_temp > 96.0 or bat_temp > 60.:
       # hysteresis between onroad not allowed and engage not allowed
       thermal_status = clip(thermal_status, ThermalStatus.red, ThermalStatus.danger)
     elif max_cpu_temp > 94.0:
@@ -442,9 +442,6 @@ def thermald_thread():
         os.system(f"nmcli radio wwan {fxn}")
 
     if should_start:
-      if not should_start_prev:
-        params.delete("IsOffroad")
-      
       off_ts = None
       if started_ts is None:
         started_ts = sec_since_boot()
@@ -452,9 +449,7 @@ def thermald_thread():
     else:
       if startup_conditions["ignition"] and (startup_conditions != startup_conditions_prev):
         cloudlog.event("Startup blocked", startup_conditions=startup_conditions)
-      if should_start_prev or (count == 0):
-        params.put("IsOffroad", "1")
-        
+
       started_ts = None
       if off_ts is None:
         off_ts = sec_since_boot()
@@ -475,12 +470,11 @@ def thermald_thread():
       HARDWARE.shutdown()
 
     # dp
-    #if should_start:
-    if not dp_auto_shutdown:
+    if should_start:
       dp_allow_shutdown = False
     else:
       if dp_auto_shutdown:
-        if msg.deviceState.usbOnline:
+        if pandaState is not None and pandaState.pandaState.usbPowerMode in [log.PandaState.UsbPowerMode.cdp]:
           dp_allow_shutdown = False
         else:
           dp_allow_shutdown = True
@@ -494,8 +488,7 @@ def thermald_thread():
       if sec_since_boot() - off_ts >= 10:
         msg.deviceState.chargingDisabled = True
         time.sleep(1)
-        os.system('LD_LIBRARY_PATH="" svc power shutdown')
-        #HARDWARE.shutdown()
+        HARDWARE.shutdown()
 
     # If UI has crashed, set the brightness to reasonable non-zero value
     manager_state = messaging.recv_one_or_none(managerState_sock)
