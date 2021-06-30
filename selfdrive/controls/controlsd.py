@@ -311,16 +311,16 @@ class Controls:
   def data_sample(self):
     """Receive data from sockets and update carState"""
 
-    # Update carState from CAN
+     Update carState from CAN
     can_strs = messaging.drain_sock_raw(self.can_sock, wait_for_one=True)
     CS = self.CI.update(self.CC, can_strs, self.sm['dragonConf'])
 
     self.sm.update(0)
 
-    #all_valid = CS.canValid and self.sm.all_alive_and_valid()
-    #if not self.initialized and (all_valid or self.sm.frame * DT_CTRL > 2.0):
-    #  self.initialized = True
-    #  Params().put_bool("ControlsReady", True)
+    all_valid = CS.canValid and self.sm.all_alive_and_valid()
+    if not self.initialized and (all_valid or self.sm.frame * DT_CTRL > 2.0):
+      self.initialized = True
+      Params().put_bool("ControlsReady", True)
 
     # Check for CAN timeout
     if not can_strs:
