@@ -311,7 +311,7 @@ class Controls:
   def data_sample(self):
     """Receive data from sockets and update carState"""
 
-     Update carState from CAN
+    #Update carState from CAN
     can_strs = messaging.drain_sock_raw(self.can_sock, wait_for_one=True)
     CS = self.CI.update(self.CC, can_strs, self.sm['dragonConf'])
 
