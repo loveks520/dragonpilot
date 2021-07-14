@@ -485,7 +485,7 @@ def thermald_thread():
         off_ts = sec_since_boot()
         dp_allow_shutdown_last = dp_allow_shutdown
 
-      if sec_since_boot() - off_ts >= 10:
+      if sec_since_boot() - off_ts >= dp_auto_shutdown_in * 60:
         msg.deviceState.chargingDisabled = True
         time.sleep(1)
         HARDWARE.shutdown()
