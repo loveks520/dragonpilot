@@ -228,7 +228,7 @@ class Controls:
                                                  LaneChangeState.laneChangeFinishing]:
       self.events.add(EventName.laneChange)
 
-    if self.can_rcv_error or (not CS.canValid and self.sm.frame > 5 / DT_CTRL):
+    if self.can_rcv_error or not CS.canValid:
       self.events.add(EventName.pcmDisable if self.sm['dragonConf'].dpAtl else EventName.canError)
 
     safety_mismatch = self.sm['pandaState'].safetyModel != self.CP.safetyModel or self.sm['pandaState'].safetyParam != self.CP.safetyParam
@@ -311,7 +311,7 @@ class Controls:
   def data_sample(self):
     """Receive data from sockets and update carState"""
 
-    #Update carState from CAN
+    # Update carState from CAN
     can_strs = messaging.drain_sock_raw(self.can_sock, wait_for_one=True)
     CS = self.CI.update(self.CC, can_strs, self.sm['dragonConf'])
 
