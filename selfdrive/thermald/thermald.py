@@ -506,7 +506,7 @@ def thermald_thread():
     if power_monitor.should_shutdown(pandaState, off_ts, started_seen, LEON):
       cloudlog.info(f"shutting device down, offroad since {off_ts}")
       # TODO: add function for blocking cloudlog instead of sleep
-      time.sleep(10)
+      time.sleep(7)
       HARDWARE.shutdown()
 
     # dp - auto shutdown
