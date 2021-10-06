@@ -8,7 +8,7 @@ LongCtrlState = car.CarControl.Actuators.LongControlState
 
 STOPPING_EGO_SPEED = 0.5
 STOPPING_TARGET_SPEED_OFFSET = 0.01
-STARTING_TARGET_SPEED = 0.5
+STARTING_TARGET_SPEED = 0.6
 DECEL_THRESHOLD_TO_PID = 0.8
 
 DECEL_STOPPING_TARGET = 2.0  # apply at least this amount of brake to maintain the vehicle stationary
