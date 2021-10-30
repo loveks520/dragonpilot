@@ -13,7 +13,7 @@ procs = [
   # due to qualcomm kernel bugs SIGKILLing camerad sometimes causes page table corruption
   NativeProcess("camerad", "selfdrive/camerad", ["./camerad"], unkillable=True, driverview=True),
   NativeProcess("clocksd", "selfdrive/clocksd", ["./clocksd"]),
-  #NativeProcess("dmonitoringmodeld", "selfdrive/modeld", ["./dmonitoringmodeld"], enabled=not JETSON and (not PC or WEBCAM), driverview=True),
+  NativeProcess("dmonitoringmodeld", "selfdrive/modeld", ["./dmonitoringmodeld"], enabled=not JETSON and (not PC or WEBCAM), driverview=True),
   NativeProcess("logcatd", "selfdrive/logcatd", ["./logcatd"], enabled=not JETSON),
   NativeProcess("loggerd", "selfdrive/loggerd", ["./loggerd"], enabled=not JETSON),
   NativeProcess("modeld", "selfdrive/modeld", ["./modeld"]),
