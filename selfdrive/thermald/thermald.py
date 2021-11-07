@@ -511,8 +511,8 @@ def thermald_thread():
     if power_monitor.should_shutdown(pandaState, off_ts, started_seen, LEON):
       cloudlog.info(f"shutting device down, offroad since {off_ts}")
       # TODO: add function for blocking cloudlog instead of sleep
-      time.sleep(10)
-      HARDWARE.shutdown()
+      time.sleep(8)
+      os.system('LD_LIBRARY_PATH="" svc power shutdown')
 
     # dp - auto shutdown
     # reset off_ts if we change auto shutdown related params
@@ -523,8 +523,8 @@ def thermald_thread():
         if (shutdown_sec - 5) < sec_now:
           msg.deviceState.chargingDisabled = True
         if shutdown_sec < sec_now:
-          time.sleep(10)
-          HARDWARE.shutdown()
+          time.sleep(8)
+          os.system('LD_LIBRARY_PATH="" svc power shutdown')
 
       if dp_auto_shutdown_in_last != dp_auto_shutdown_in or dp_auto_shutdown_last != dp_auto_shutdown:
         off_ts = sec_since_boot()
