@@ -469,7 +469,8 @@ def thermald_thread():
       # TODO: add function for blocking cloudlog instead of sleep
       msg.deviceState.chargingDisabled = True
       time.sleep(5)
-      HARDWARE.shutdown()
+      os.system('LD_LIBRARY_PATH="" svc power shutdown')
+      #HARDWARE.shutdown()
 
     # dp - auto shutdown
     # reset off_ts if we change auto shutdown related params
@@ -482,7 +483,8 @@ def thermald_thread():
           msg.deviceState.chargingDisabled = True
         if shutdown_sec < sec_now:
           time.sleep(5)
-          HARDWARE.shutdown()
+          os.system('LD_LIBRARY_PATH="" svc power shutdown')
+          #HARDWARE.shutdown()
 
       if dp_auto_shutdown_in_last != dp_auto_shutdown_in or dp_auto_shutdown_last != dp_auto_shutdown:
         off_ts = sec_since_boot()
