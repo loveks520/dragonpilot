@@ -48,8 +48,8 @@ class DRIVER_MONITOR_SETTINGS():
     self._DISTRACTED_FILTER_TS = 0.25  # 0.6Hz
 
     self._POSE_CALIB_MIN_SPEED = 13  # 30 mph
-    self._POSE_OFFSET_MIN_COUNT = int(60 / self._DT_DMON)  # valid data counts before calibration completes, 1min cumulative
-    self._POSE_OFFSET_MAX_COUNT = int(360 / self._DT_DMON)  # stop deweighting new data after 6 min, aka "short term memory"
+    self._POSE_OFFSET_MIN_COUNT = 600  # valid data counts before calibration completes, 1min cumulative
+    self._POSE_OFFSET_MAX_COUNT = 3600  # stop deweighting new data after 6 min, aka "short term memory"
 
     self._RECOVERY_FACTOR_MAX = 5.  # relative to minus step change
     self._RECOVERY_FACTOR_MIN = 1.25  # relative to minus step change
