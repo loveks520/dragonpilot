@@ -475,7 +475,8 @@ def thermald_thread():
     # dp - auto shutdown
     # reset off_ts if we change auto shutdown related params
     if off_ts is not None:
-      if dp_auto_shutdown and msg.deviceState.usbOnline :
+      #if dp_auto_shutdown:
+      if dp_auto_shutdown and msg.deviceState.usbOnline:
         #shutdown_sec = dp_auto_shutdown_in * 60
         shutdown_sec = 13
         sec_now = sec_since_boot() - off_ts
