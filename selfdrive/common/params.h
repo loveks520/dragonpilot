@@ -79,6 +79,8 @@ public:
     return putBool(key.c_str(), val);
   }
 
+  inline std::string get_params_path();
+
 private:
   const std::string params_path;
 };

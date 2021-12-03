@@ -18,6 +18,8 @@ from typing import Any
 import requests
 from jsonrpc import JSONRPCResponseManager, dispatcher
 from websocket import ABNF, WebSocketTimeoutException, WebSocketException, create_connection
+from common.params import Params
+API_HOST = os.getenv('API_HOST', 'https://api.commadotai.com') if not Params().get_bool("dp_api_custom") else Params().get("dp_api_custom_url", encoding='utf-8')
 
 import cereal.messaging as messaging
 from cereal.services import service_list
@@ -60,14 +62,14 @@ def handle_long_poll(ws):
   end_event = threading.Event()
 
   threads = [
-    threading.Thread(target=ws_recv, args=(ws, end_event), name='ws_recv'),
-    threading.Thread(target=ws_send, args=(ws, end_event), name='ws_send'),
-    threading.Thread(target=upload_handler, args=(end_event,), name='upload_handler'),
-    threading.Thread(target=log_handler, args=(end_event,), name='log_handler'),
-  ] + [
-    threading.Thread(target=jsonrpc_handler, args=(end_event,), name=f'worker_{x}')
-    for x in range(HANDLER_THREADS)
-  ]
+              threading.Thread(target=ws_recv, args=(ws, end_event), name='ws_recv'),
+              threading.Thread(target=ws_send, args=(ws, end_event), name='ws_send'),
+              threading.Thread(target=upload_handler, args=(end_event,), name='upload_handler'),
+              threading.Thread(target=log_handler, args=(end_event,), name='log_handler'),
+            ] + [
+              threading.Thread(target=jsonrpc_handler, args=(end_event,), name=f'worker_{x}')
+              for x in range(HANDLER_THREADS)
+            ]
 
   for thread in threads:
     thread.start()
@@ -570,7 +572,7 @@ def main():
       params.delete("LastAthenaPingTime")
     except socket.timeout:
       try:
-        r = requests.get("http://api.commadotai.com/v1/me", allow_redirects=False,
+        r = requests.get(API_HOST + "/v1/me", allow_redirects=False,
                          headers={"User-Agent": f"openpilot-{version}"}, timeout=15.0)
         if r.status_code == 302 and r.headers['Location'].startswith("http://u.web2go.com"):
           params.put_bool("PrimeRedirected", True)

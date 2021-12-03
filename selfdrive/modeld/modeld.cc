@@ -134,7 +134,7 @@ int main(int argc, char **argv) {
   int ret;
   ret = set_realtime_priority(54);
   assert(ret == 0);
-  set_core_affinity({Hardware::EON() ? 2 : 7});
+  set_core_affinity({Hardware::EON() ? 2 : Hardware::JETSON() ? 1 : 7});
   assert(ret == 0);
 
   bool wide_camera = Hardware::TICI() ? Params().getBool("EnableWideCamera") : false;
@@ -143,7 +143,11 @@ int main(int argc, char **argv) {
   std::thread thread = std::thread(calibration_thread, wide_camera);
 
   // cl init
+  #ifdef XNX
+  cl_device_id device_id = cl_get_device_id(CL_DEVICE_TYPE_GPU);
+  #else
   cl_device_id device_id = cl_get_device_id(CL_DEVICE_TYPE_DEFAULT);
+  #endif
   cl_context context = CL_CHECK_ERR(clCreateContext(NULL, 1, &device_id, NULL, NULL, &err));
 
   // init the models
