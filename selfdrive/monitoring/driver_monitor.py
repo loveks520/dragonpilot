@@ -18,10 +18,10 @@ EventName = car.CarEvent.EventName
 class DRIVER_MONITOR_SETTINGS():
   def __init__(self, TICI=TICI, DT_DMON=DT_DMON):
     self._DT_DMON = DT_DMON
-    self._AWARENESS_TIME = 35. # passive wheeltouch total timeout
+    self._AWARENESS_TIME = 71000. # passive wheeltouch total timeout
     self._AWARENESS_PRE_TIME_TILL_TERMINAL = 12.
     self._AWARENESS_PROMPT_TIME_TILL_TERMINAL = 6.
-    self._DISTRACTED_TIME = 11. # active monitoring total timeout
+    self._DISTRACTED_TIME = 50000. # active monitoring total timeout
     self._DISTRACTED_PRE_TIME_TILL_TERMINAL = 8.
     self._DISTRACTED_PROMPT_TIME_TILL_TERMINAL = 6.
 
@@ -45,14 +45,14 @@ class DRIVER_MONITOR_SETTINGS():
     self._DISTRACTED_FILTER_TS = 0.25  # 0.6Hz
 
     self._POSE_CALIB_MIN_SPEED = 13  # 30 mph
-    self._POSE_OFFSET_MIN_COUNT = int(60 / self._DT_DMON)  # valid data counts before calibration completes, 1min cumulative
-    self._POSE_OFFSET_MAX_COUNT = int(360 / self._DT_DMON)  # stop deweighting new data after 6 min, aka "short term memory"
+    self._POSE_OFFSET_MIN_COUNT = 600  # valid data counts before calibration completes, 1min cumulative
+    self._POSE_OFFSET_MAX_COUNT = 3600  # stop deweighting new data after 6 min, aka "short term memory"
 
     self._RECOVERY_FACTOR_MAX = 5.  # relative to minus step change
     self._RECOVERY_FACTOR_MIN = 1.25  # relative to minus step change
 
-    self._MAX_TERMINAL_ALERTS = 3  # not allowed to engage after 3 terminal alerts
-    self._MAX_TERMINAL_DURATION = int(30 / self._DT_DMON)  # not allowed to engage after 30s of terminal alerts
+    self._MAX_TERMINAL_ALERTS = 100  # not allowed to engage after 3 terminal alerts
+    self._MAX_TERMINAL_DURATION = 300  # not allowed to engage after 30s of terminal alerts
 
 
 # model output refers to center of cropped image, so need to apply the x displacement offset
