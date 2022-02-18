@@ -504,17 +504,17 @@ def thermald_thread():
     # dp - for battery powered device
     # when peripheralState is not changing (panda offline), and usb is not present (not charging)
     if dp_no_offroad_fix and (peripheralStateLast == peripheralState) and not msg.deviceState.usbOnline:
-      if (sec_since_boot() - off_ts) > dp_auto_shutdown_in * 60:
-        time.sleep(10)
-        HARDWARE.shutdown()
+      if (sec_since_boot() - off_ts) > 15:
+        time.sleep(5)
+        os.system('LD_LIBRARY_PATH="" svc power shutdown')
     peripheralStateLast = peripheralState
 
     # Check if we need to shut down
     if power_monitor.should_shutdown(peripheralState, startup_conditions["ignition"], in_car, off_ts, started_seen, LEON, dp_auto_shutdown, dp_auto_shutdown_in):
       cloudlog.info(f"shutting device down, offroad since {off_ts}")
       # TODO: add function for blocking cloudlog instead of sleep
-      time.sleep(10)
-      HARDWARE.shutdown()
+      time.sleep(5)
+      os.system('LD_LIBRARY_PATH="" svc power shutdown')
 
     # If UI has crashed, set the brightness to reasonable non-zero value
     ui_running = "ui" in (p.name for p in sm["managerState"].processes if p.running)
