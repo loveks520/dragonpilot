@@ -251,6 +251,7 @@ def thermald_thread():
     params.put_bool("BootedOnroad", True)
 
   # dp
+  peripheralStateLast = None
   dp_no_batt = params.get_bool("dp_no_batt")
   dp_temp_monitor = True
   dp_last_modified_temp_monitor = None
@@ -268,6 +269,7 @@ def thermald_thread():
   last_modified = None
   last_modified_check = None
 
+  dp_no_offroad_fix = params.get_bool('dp_no_offroad_fix')
   if JETSON:
     handle_fan = handle_fan_jetson
 
@@ -469,6 +471,9 @@ def thermald_thread():
 
     # Handle offroad/onroad transition
     should_start = all(startup_conditions.values())
+    # dp - check usb_present to fix not going offroad on "EON/LEON + battery - Comma Power"
+    if dp_no_offroad_fix:
+      should_start = should_start and HARDWARE.get_usb_present()
     if should_start != should_start_prev or (count == 0):
       params.put_bool("IsOnroad", should_start)
       params.put_bool("IsOffroad", not should_start)
@@ -495,6 +500,14 @@ def thermald_thread():
 
     # Check if we need to disable charging (handled by boardd)
     msg.deviceState.chargingDisabled = power_monitor.should_disable_charging(startup_conditions["ignition"], in_car, off_ts, dp_auto_shutdown, dp_auto_shutdown_in)
+
+    # dp - for battery powered device
+    # when peripheralState is not changing (panda offline), and usb is not present (not charging)
+    if dp_no_offroad_fix and (peripheralStateLast == peripheralState) and not msg.deviceState.usbOnline:
+      if (sec_since_boot() - off_ts) > dp_auto_shutdown_in * 60:
+        time.sleep(10)
+        HARDWARE.shutdown()
+    peripheralStateLast = peripheralState
 
     # Check if we need to shut down
     if power_monitor.should_shutdown(peripheralState, startup_conditions["ignition"], in_car, off_ts, started_seen, LEON, dp_auto_shutdown, dp_auto_shutdown_in):
