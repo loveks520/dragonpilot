@@ -144,7 +144,7 @@ class Planner():
     self.mpc.set_accel_limits(accel_limits_turns[0], accel_limits_turns[1])
     self.mpc.set_cur_state(self.v_desired, self.a_desired)
     self.mpc.update(sm['carState'], sm['radarState'], v_cruise_sol)
-    if self.v_desired < -1:
+    if self.v_desired < 13:
       self.mpc.set_desired_TR(1.1)
     else:
       self.mpc.set_desired_TR(1.6)
