@@ -146,7 +146,7 @@ class Planner():
     self.mpc.update(sm['carState'], sm['radarState'], v_cruise_sol)
     if self.v_desired < 12:
       self.mpc.set_desired_TR(1.1)
-    else
+    else:
       self.mpc.set_desired_TR(1.6)
     self.v_desired_trajectory = np.interp(T_IDXS[:CONTROL_N], T_IDXS_MPC, self.mpc.v_solution)
     self.a_desired_trajectory = np.interp(T_IDXS[:CONTROL_N], T_IDXS_MPC, self.mpc.a_solution)
