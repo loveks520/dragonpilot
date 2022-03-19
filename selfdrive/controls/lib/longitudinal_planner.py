@@ -40,12 +40,12 @@ DP_ACCEL_SPORT = 2
 
 # accel profile by @arne182 modified by @wer5lcy
 _DP_CRUISE_MIN_V = [-2.0, -1.8, -1.6, -1.4, -1.2]
-_DP_CRUISE_MIN_V_ECO = [-2.0, -1.6, -1.4, -1.2, -1.0]
+_DP_CRUISE_MIN_V_ECO = [-2.0, -1.8, -1.5, -1.2, -1.0]
 _DP_CRUISE_MIN_V_SPORT = [-3.0, -2.6, -2.3, -2.0, -1.0]
 _DP_CRUISE_MIN_BP = [0.0, 5.0, 10.0, 20.0, 55.0]
 
 _DP_CRUISE_MAX_V = [1.6, 1.4, 1.0, 0.6, 0.3]
-_DP_CRUISE_MAX_V_ECO = [1.5, 1.3, 0.8, 0.4, 0.25]
+_DP_CRUISE_MAX_V_ECO = [1.6, 1.4, 1.0, 0.5, 0.25]
 _DP_CRUISE_MAX_V_SPORT = [3.0, 3.5, 3.0, 2.0, 2.0]
 _DP_CRUISE_MAX_BP = [0., 5., 10., 20., 55.]
 
@@ -91,7 +91,7 @@ class Planner():
     self.dp_accel_profile = DP_ACCEL_ECO
     self.dp_following_profile_ctrl = False
     self.dp_following_profile = 2
-    self.dp_following_dist = 1.6 # default val
+    self.dp_following_dist = 1.4 # default val
     self.cruise_source = 'cruise'
     self.vision_turn_controller = VisionTurnController(CP)
     self.speed_limit_controller = SpeedLimitController()
@@ -144,10 +144,10 @@ class Planner():
     self.mpc.set_accel_limits(accel_limits_turns[0], accel_limits_turns[1])
     self.mpc.set_cur_state(self.v_desired, self.a_desired)
     self.mpc.update(sm['carState'], sm['radarState'], v_cruise_sol)
-    if self.v_desired < 13:
-      self.mpc.set_desired_TR(1.1)
+    if self.v_desired < 19:
+      self.mpc.set_desired_TR(1.0)
     else:
-      self.mpc.set_desired_TR(1.6)
+      self.mpc.set_desired_TR(1.4)
     self.v_desired_trajectory = np.interp(T_IDXS[:CONTROL_N], T_IDXS_MPC, self.mpc.v_solution)
     self.a_desired_trajectory = np.interp(T_IDXS[:CONTROL_N], T_IDXS_MPC, self.mpc.a_solution)
     self.j_desired_trajectory = np.interp(T_IDXS[:CONTROL_N], T_IDXS_MPC[:-1], self.mpc.j_solution)
