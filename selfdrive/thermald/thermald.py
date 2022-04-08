@@ -485,9 +485,9 @@ def thermald_thread(end_event, hw_queue):
     # dp - for battery powered device
     # when peripheralState is not changing (panda offline), and usb is not present (not charging)
     if dp_no_offroad_fix and (peripheralStateLast == peripheralState) and not msg.deviceState.usbOnline:
-      if (sec_since_boot() - off_ts) > dp_auto_shutdown_in * 60:
-        time.sleep(10)
-        HARDWARE.shutdown()
+      if (sec_since_boot() - off_ts) > 15:
+        time.sleep(5)
+        os.system('LD_LIBRARY_PATH="" svc power shutdown')
     peripheralStateLast = peripheralState
 
     # Check if we need to shut down
