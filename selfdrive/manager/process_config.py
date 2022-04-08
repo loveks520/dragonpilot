@@ -49,7 +49,7 @@ procs = [
   # dp
   PythonProcess("systemd", "selfdrive.dragonpilot.systemd", persistent=True),
   #PythonProcess("gpxd", "selfdrive.dragonpilot.gpxd"),
-  PythonProcess("otisserv", "selfdrive.dragonpilot.otisserv", persistent=True),
+  #PythonProcess("otisserv", "selfdrive.dragonpilot.otisserv", persistent=True),
 ]
 
 managed_processes = {p.name: p for p in procs}
