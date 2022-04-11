@@ -11,7 +11,6 @@ procs = [
   # due to qualcomm kernel bugs SIGKILLing camerad sometimes causes page table corruption
   NativeProcess("camerad", "selfdrive/camerad", ["./camerad"], unkillable=True, driverview=True),
   NativeProcess("clocksd", "selfdrive/clocksd", ["./clocksd"]),
-  NativeProcess("dmonitoringmodeld", "selfdrive/modeld", ["./dmonitoringmodeld"], enabled=not MIPI and (not PC or WEBCAM), driverview=True),
   NativeProcess("logcatd", "selfdrive/logcatd", ["./logcatd"]),
   NativeProcess("loggerd", "selfdrive/loggerd", ["./loggerd"]),
   NativeProcess("modeld", "selfdrive/modeld", ["./modeld"]),
@@ -26,7 +25,6 @@ procs = [
   PythonProcess("calibrationd", "selfdrive.locationd.calibrationd"),
   PythonProcess("controlsd", "selfdrive.controls.controlsd"),
   PythonProcess("deleter", "selfdrive.loggerd.deleter", persistent=True),
-  PythonProcess("dmonitoringd", "selfdrive.monitoring.dmonitoringd", enabled=not MIPI and (not PC or WEBCAM), driverview=True),
   PythonProcess("logmessaged", "selfdrive.logmessaged", persistent=True),
   PythonProcess("pandad", "selfdrive.pandad", persistent=True),
   PythonProcess("paramsd", "selfdrive.locationd.paramsd"),
@@ -35,11 +33,13 @@ procs = [
   PythonProcess("thermald", "selfdrive.thermald.thermald", persistent=True),
   PythonProcess("timezoned", "selfdrive.timezoned", enabled=TICI, persistent=True),
   PythonProcess("tombstoned", "selfdrive.tombstoned", enabled=not PC and not MIPI, persistent=True),
-  PythonProcess("updated", "selfdrive.updated", enabled=not PC, persistent=True),
-  PythonProcess("uploader", "selfdrive.loggerd.uploader", enabled=not MIPI, persistent=True),
   PythonProcess("statsd", "selfdrive.statsd", persistent=True),
   PythonProcess("mapd", "selfdrive.mapd.mapd"),
-
+  #del---
+  NativeProcess("dmonitoringmodeld", "selfdrive/modeld", ["./dmonitoringmodeld"], enabled=not MIPI and (not PC or WEBCAM), driverview=True),
+  PythonProcess("updated", "selfdrive.updated", enabled=not PC, persistent=True),
+  PythonProcess("uploader", "selfdrive.loggerd.uploader", enabled=not MIPI, persistent=True),
+  PythonProcess("dmonitoringd", "selfdrive.monitoring.dmonitoringd", enabled=not MIPI and (not PC or WEBCAM), driverview=True),
   # EON only
   PythonProcess("rtshield", "selfdrive.rtshield", enabled=EON),
   PythonProcess("shutdownd", "selfdrive.hardware.eon.shutdownd", enabled=EON),
@@ -47,8 +47,8 @@ procs = [
 
   # dp
   PythonProcess("systemd", "selfdrive.dragonpilot.systemd", persistent=True),
-  PythonProcess("gpxd", "selfdrive.dragonpilot.gpxd"),
-  PythonProcess("otisserv", "selfdrive.dragonpilot.otisserv", persistent=True),
+  #PythonProcess("gpxd", "selfdrive.dragonpilot.gpxd"),
+  #PythonProcess("otisserv", "selfdrive.dragonpilot.otisserv", persistent=True),
 ]
 
 managed_processes = {p.name: p for p in procs}
