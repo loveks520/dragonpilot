@@ -335,7 +335,7 @@ class LongitudinalMpc:
 
   def update_TF(self, carstate):
     x_vel = [0.0, 2.788,  5.56,  8.333,  11.11, 13.89, 19.44, 27.78, 41.67]  # velocities
-    y_dist = [1.24, 1.25, 1.27,   1.30,   1.38,  1.38,  1.38,  1.559, 1.67]
+    y_dist = [1.24, 1.25, 1.27,   1.30,   1.38,  1.38,  1.38,  1.559, 1.65]
     self.desired_TF = np.interp(carstate.vEgo, x_vel, y_dist)
     #self.desired_TF = 1.7
 
