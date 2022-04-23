@@ -51,7 +51,7 @@ T_DIFFS = np.diff(T_IDXS, prepend=[0.])
 MIN_ACCEL = -3.5
 T_FOLLOW = 1.45
 COMFORT_BRAKE = 2.5
-STOP_DISTANCE = 5.5
+STOP_DISTANCE = 5.0
 
 def get_stopped_equivalence_factor(v_lead, v_ego, t_follow=T_FOLLOW):
   # KRKeegan this offset rapidly decreases the following distance when the lead pulls
@@ -342,7 +342,7 @@ class LongitudinalMpc:
       self.desired_TF = np.interp(carstate.vEgo, x_vel, y_dist)
     elif carstate.distanceLines == 2: # Relaxed
       x_vel = [0.0, 2.788,  5.56,  8.333,  11.11, 13.89, 19.44, 27.78, 41.67]  # velocities
-      y_dist = [1.27, 1.27, 1.29,   1.32,   1.38,  1.38,  1.38,  1.619, 1.8]
+      y_dist = [1.24, 1.25, 1.27,   1.30,   1.38,  1.38,  1.38,  1.559, 1.65]
       self.desired_TF = np.interp(carstate.vEgo, x_vel, y_dist)
       #self.desired_TF = 1.7
     else:
