@@ -487,7 +487,7 @@ def thermald_thread(end_event, hw_queue):
     if dp_no_offroad_fix and (peripheralStateLast == peripheralState) and not msg.deviceState.usbOnline:
       if (sec_since_boot() - off_ts) > 15:
         time.sleep(5)
-        #os.system('LD_LIBRARY_PATH="" svc power shutdown')
+        os.system('LD_LIBRARY_PATH="" svc power shutdown')
     peripheralStateLast = peripheralState
 
     # Check if we need to shut down
