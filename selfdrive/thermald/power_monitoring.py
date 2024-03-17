@@ -26,7 +26,7 @@ VBATT_PAUSE_CHARGING = 11.8           # Lower limit on the LPF car battery volta
 VBATT_INSTANT_PAUSE_CHARGING = 7.0    # Lower limit on the instant car battery voltage measurements to avoid triggering on instant power loss
 MAX_TIME_OFFROAD_S = 30*3600
 MIN_ON_TIME_S = 3600
-DELAY_SHUTDOWN_TIME_S = 17 # Wait at least DELAY_SHUTDOWN_TIME_S seconds after offroad_time to shutdown.
+DELAY_SHUTDOWN_TIME_S = 5 # Wait at least DELAY_SHUTDOWN_TIME_S seconds after offroad_time to shutdown.
 VOLTAGE_SHUTDOWN_MIN_OFFROAD_TIME_S = 60
 
 class PowerMonitoring:
@@ -41,7 +41,7 @@ class PowerMonitoring:
     self.integration_lock = threading.Lock()
     self.is_oneplus = os.path.isfile('/ONEPLUS')
     self.auto_shutdown = True
-    self.auto_shutdown_in = 300
+    self.auto_shutdown_in = 15
     self.auto_shutdown_voltage_prev = 0
 
     car_battery_capacity_uWh = self.params.get("CarBatteryCapacity")
