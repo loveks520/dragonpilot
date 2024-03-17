@@ -436,7 +436,7 @@ class Controls:
       if not NOSENSOR and not self.dp_no_gps_ctrl:
         if not self.sm['liveLocationKalman'].gpsOK and self.sm['liveLocationKalman'].inputsOK and (self.distance_traveled > 1000):
           # Not show in first 1 km to allow for driving out of garage. This event shows after 5 minutes
-          self.events.add(EventName.noGps)
+          #self.events.add(EventName.noGps)
 
       if self.sm['modelV2'].frameDropPerc > 20:
         self.events.add(EventName.modeldLagging)
