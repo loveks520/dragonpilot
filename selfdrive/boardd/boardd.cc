@@ -680,7 +680,10 @@ static void pigeon_publish_raw(PubMaster &pm, const std::string &dat) {
 }
 
 void pigeon_thread(Panda *panda) {
-  Params().putBool("dp_no_gps_ctrl", !panda->has_gps);
+  if (!panda->has_gps) {
+    Params().putBool("dp_no_gps_ctrl", true);
+    return;
+  }
   util::set_thread_name("boardd_pigeon");
 
   PubMaster pm({"ubloxRaw"});
