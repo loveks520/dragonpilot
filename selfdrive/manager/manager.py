@@ -154,7 +154,7 @@ def manager_thread() -> None:
   ignore: List[str] = []
   dp_jetson = params.get_bool('dp_jetson')
   ignore += ['dmonitoringmodeld', 'dmonitoringd']
-  ignore += ['uploader']
+  #ignore += ['uploader']
   ignore += ['logcatd', 'proclogd', 'loggerd', 'logmessaged', 'encoderd', '']
   if params.get("DongleId", encoding='utf8') in (None, UNREGISTERED_DONGLE_ID):
     ignore += ["manage_athenad", "uploader"]
