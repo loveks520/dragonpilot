@@ -185,7 +185,7 @@ class CarState(CarStateBase):
       self.status_check = int(self.ispressed_init + self.e2e_init)
       if (self.status_check == 1 or self.status_check >= 4) and self.ispressed != self.ispressed_prev:
         self.e2eLongButton = not self.params.get_bool("ExperimentalMode")
-        self.params.put_bool("ExperimentalMode", self.e2eLongButton)
+        self.params.put_bool("ExperimentalMode", False)
       self.ispressed_prev = self.ispressed
       self.ispressed_init = 2
       self.e2e_init = 2
