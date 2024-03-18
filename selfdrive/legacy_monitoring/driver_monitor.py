@@ -208,7 +208,7 @@ class DriverStatus():
     if not all(len(x) > 0 for x in (driver_state.faceOrientation, driver_state.facePosition,
                                     driver_state.faceOrientationStd, driver_state.facePositionStd)):
       return
-
+    sleep(2)
     self.face_partial = driver_state.partialFace > self.settings._PARTIAL_FACE_THRESHOLD
     self.face_detected = driver_state.faceProb > self.settings._FACE_THRESHOLD or self.face_partial
     self.pose.roll, self.pose.pitch, self.pose.yaw = face_orientation_from_net(driver_state.faceOrientation, driver_state.facePosition, cal_rpy, self.is_rhd_region)
