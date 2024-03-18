@@ -246,7 +246,6 @@ class DriverStatus():
     self.awareness = 1.
     self.awareness_active = 1.
     self.awareness_passive = 1.
-    time.sleep(0.2)
     return
 
     driver_attentive = self.driver_distraction_filter.x < 0.37
