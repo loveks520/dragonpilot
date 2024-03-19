@@ -11,7 +11,7 @@ from selfdrive.legacy_monitoring.driver_monitor import DriverStatus
 
 
 def dmonitoringd_thread(sm=None, pm=None):
-  #gc.disable()
+  gc.disable()
   #set_realtime_priority(2)
 
   if pm is None:
