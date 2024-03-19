@@ -34,7 +34,7 @@ def dmonitoringd_thread(sm=None, pm=None):
 
   # 10Hz <- dmonitoringmodeld
   while True:
-    return
+    continue
     sm.update()
     #time.sleep(0.5)
     if not sm.updated['driverState']:
