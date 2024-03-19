@@ -11,8 +11,8 @@ from selfdrive.legacy_monitoring.driver_monitor import DriverStatus
 
 
 def dmonitoringd_thread(sm=None, pm=None):
-  gc.disable()
-  set_realtime_priority(2)
+  #gc.disable()
+  #set_realtime_priority(2)
 
   if pm is None:
     pm = messaging.PubMaster(['driverMonitoringState'])
@@ -34,6 +34,7 @@ def dmonitoringd_thread(sm=None, pm=None):
 
   # 10Hz <- dmonitoringmodeld
   while True:
+    return
     sm.update()
     #time.sleep(0.5)
     if not sm.updated['driverState']:
