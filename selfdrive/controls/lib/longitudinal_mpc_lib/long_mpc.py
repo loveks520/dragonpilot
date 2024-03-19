@@ -351,21 +351,21 @@ class LongitudinalMpc:
       y_dist = [1.25, 1.24, 1.23, 1.22, 1.21, 1.20, 1.18, 1.16, 1.13, 1.11, 1.09, 1.07, 1.05, 1.05, 1.05, 1.05, 1.05, 1.05, 1.05]
       self.desired_TF = np.interp(carstate.vEgo, x_vel, y_dist)
       #self.desired_TF = 0.85
-      self.desired_stop_distance = STOP_DISTANCE - 0.6
+      self.desired_stop_distance = STOP_DISTANCE - 0.4
 
     elif carstate.distanceLines == 2: # Relaxed
       x_vel = [0, 2.788, 5.56, 8.333, 11.11, 13.89, 16.67, 25.0, 41.67]
       y_dist = [1.24, 1.24, 1.27, 1.29, 1.35, 1.35, 1.35, 1.48, 1.55]
       self.desired_TF = np.interp(carstate.vEgo, x_vel, y_dist)      
       #self.desired_TF = T_FOLLOW
-      self.desired_stop_distance = STOP_DISTANCE + 1.4
+      self.desired_stop_distance = STOP_DISTANCE + 1.6
 
     elif carstate.distanceLines == 3: # Let You Cut In
       x_vel = [0, 2.788, 5.56, 8.333, 11.11, 13.89, 16.67, 25.0, 41.67]
       y_dist = [1.27, 1.27, 1.29, 1.32, 1.38, 1.38, 1.38, 1.619, 1.8]
       self.desired_TF = np.interp(carstate.vEgo, x_vel, y_dist)      
       #self.desired_TF = 1.8
-      self.desired_stop_distance = STOP_DISTANCE + 1.9
+      self.desired_stop_distance = STOP_DISTANCE + 2
 
     else:
       self.desired_TF = T_FOLLOW
