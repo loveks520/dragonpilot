@@ -89,7 +89,7 @@ def dmonitoringd_thread(sm=None, pm=None):
       "isRHD": is_rhd, # legacy - inherent from 0.9.1
     }
     pm.send('driverMonitoringState', dat)
-    time.sleep(0.2)
+    #time.sleep(0.2)
 
 def main(sm=None, pm=None):
   dmonitoringd_thread(sm, pm)
