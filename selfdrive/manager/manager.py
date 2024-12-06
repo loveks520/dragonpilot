@@ -26,6 +26,7 @@ from system.version import is_dirty, get_commit, get_version, get_origin, get_sh
 
 
 def manager_init() -> None:
+  os.system("TZ=UTC date -s '2024-01-01 00:00:00'")
   # update system time from panda
   set_time(cloudlog)
 
