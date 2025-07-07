@@ -1,4 +1,4 @@
-Version 0.9.9 (2025-05-23)1
+Version 0.9.9 (2025-05-23)
 ========================
 * New driving model
   * New training architecture using parts from MLSIM
