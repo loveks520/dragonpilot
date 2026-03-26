@@ -80,7 +80,7 @@ class CarInterface(CarInterfaceBase):
       ret.steerActuatorDelay = 0.3
       ret.steerRatio = 15.74
       ret.tireStiffnessFactor = 0.6371
-      ret.mass = 3045. * CV.LB_TO_KG + STD_CARGO_KG
+      #ret.mass = 3045. * CV.LB_TO_KG + STD_CARGO_KG
       # Only give steer angle deadzone to for bad angle sensor prius
       for fw in car_fw:
         if fw.ecu == "eps" and not fw.fwVersion == b'8965B47060\x00\x00\x00\x00\x00\x00':
