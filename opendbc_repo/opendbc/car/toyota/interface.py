@@ -149,11 +149,11 @@ class CarInterface(CarInterfaceBase):
       print("dragonpilot: SDSU detected!")
       print("----------------------------------------------")
 
-    sdsu_active = True
-    stop_and_go = True
+      sdsu_active = True
+      stop_and_go = True
 
-    ret.flags |= ToyotaFlags.SDSU.value
-    ret.alphaLongitudinalAvailable = False
+      ret.flags |= ToyotaFlags.SDSU.value
+      ret.alphaLongitudinalAvailable = False
 
     # openpilot longitudinal enabled by default:
     #  - cars w/ DSU disconnected
