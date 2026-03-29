@@ -58,7 +58,15 @@ def get_max_accel(v_ego):
 
 def get_coast_accel(pitch):
   return np.sin(pitch) * -5.65 - 0.3  # fitted from data using xx/projects/allow_throttle/compute_coast_accel.py
+  
+def get_min_accel_toyota(v_ego):
+  return interp(v_ego, A_CRUISE_MIN_BP_TOYOTA, A_CRUISE_MIN_VALS_TOYOTA)
 
+def get_max_accel(v_ego):
+  return interp(v_ego, A_CRUISE_MAX_BP, A_CRUISE_MAX_VALS)
+
+def get_max_accel_toyota(v_ego):
+  return interp(v_ego, A_CRUISE_MAX_BP_TOYOTA, A_CRUISE_MAX_VALS_TOYOTA)
 
 def limit_accel_in_turns(v_ego, angle_steers, a_target, CP):
   """
