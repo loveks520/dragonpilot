@@ -31,6 +31,12 @@ except ImportError:
 LON_MPC_STEP = 0.2  # first step is 0.2s
 A_CRUISE_MAX_VALS = [1.6, 1.2, 0.8, 0.6]
 A_CRUISE_MAX_BP = [0., 10.0, 25., 40.]
+# --- 移植自舊版: Toyota 專屬曲線 ---
+A_CRUISE_MIN_VALS_TOYOTA = [-0.50, -0.65, -0.65, -0.68, -0.58,  -0.40]
+A_CRUISE_MIN_BP_TOYOTA =   [0.,    8.3,   14,    20.,   30.,    55.]
+A_CRUISE_MAX_VALS_TOYOTA = [2.2, 1.8, 1.4, 0.97, 0.89, 0.81, 0.63, 0.4,  0.31, 0.11]
+A_CRUISE_MAX_BP_TOYOTA =   [0.,  3.,  6.,  8.,   11.,  15.,  20.,  25.,  30.,  55.]
+
 CONTROL_N_T_IDX = ModelConstants.T_IDXS[:CONTROL_N]
 ALLOW_THROTTLE_THRESHOLD = 0.4
 MIN_ALLOW_THROTTLE_SPEED = 2.5
@@ -145,12 +151,19 @@ class LongitudinalPlanner:
     # No change cost when user is controlling the speed, or when standstill
     prev_accel_constraint = not (reset_state or sm['carState'].standstill)
 
+    # --- 修改部分: 移植 Toyota 專屬加速邏輯 ---
     if mode == 'acc':
-      accel_clip = [ACCEL_MIN, get_max_accel(v_ego)]
+      if self.CP.carName == "toyota":
+        # 使用移植過來的 Toyota 專屬加速與減速曲線
+        accel_clip = [get_min_accel_toyota(v_ego), get_max_accel_toyota(v_ego)]
+      else:
+        accel_clip = [ACCEL_MIN, get_max_accel(v_ego)]
+      
       steer_angle_without_offset = sm['carState'].steeringAngleDeg - sm['liveParameters'].angleOffsetDeg
       accel_clip = limit_accel_in_turns(v_ego, steer_angle_without_offset, accel_clip, self.CP)
     else:
       accel_clip = [ACCEL_MIN, ACCEL_MAX]
+    # ---------------------------------------
 
     # dp - MAA turn speed control
     virtual_lead = None
