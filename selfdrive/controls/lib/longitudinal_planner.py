@@ -153,12 +153,8 @@ class LongitudinalPlanner:
 
     # --- 修改部分: 移植 Toyota 專屬加速邏輯 ---
     if mode == 'acc':
-      if self.CP.carName == "toyota":
-        # 使用移植過來的 Toyota 專屬加速與減速曲線
-        accel_clip = [get_min_accel_toyota(v_ego), get_max_accel_toyota(v_ego)]
-      else:
-        accel_clip = [ACCEL_MIN, get_max_accel(v_ego)]
-      
+      # 使用移植過來的 Toyota 專屬加速與減速曲線
+      accel_clip = [get_min_accel_toyota(v_ego), get_max_accel_toyota(v_ego)]    
       steer_angle_without_offset = sm['carState'].steeringAngleDeg - sm['liveParameters'].angleOffsetDeg
       accel_clip = limit_accel_in_turns(v_ego, steer_angle_without_offset, accel_clip, self.CP)
     else:
