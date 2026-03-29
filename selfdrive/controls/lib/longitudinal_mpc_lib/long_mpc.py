@@ -83,7 +83,7 @@ def get_stopped_equivalence_factor(v_lead, v_ego):
   # 1. 計算舊版的起步補償 (v_diff_offset)
   v_diff_offset = 0
   if v_lead - v_ego > 0:
-    v_diff_offset = (v_lead - v_ego) * 1.0
+    v_diff_offset = (v_lead - v_ego) * 1.2
     v_diff_offset = np.clip(v_diff_offset, 0, STOP_DISTANCE / 2)
     # 當自車時速超過 10 m/s (約 36 km/h) 後，這個補償會線性消失
     v_diff_offset = np.maximum(v_diff_offset * ((10 - v_ego)/10), 0)
