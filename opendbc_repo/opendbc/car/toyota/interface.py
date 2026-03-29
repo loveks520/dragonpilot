@@ -77,13 +77,16 @@ class CarInterface(CarInterfaceBase):
 
     if candidate == CAR.TOYOTA_PRIUS:
       stop_and_go = True
+      ret.steerActuatorDelay = 0.3
+      ret.steerRatio = 15.74
+      ret.tireStiffnessFactor = 0.6371
       # Only give steer angle deadzone to for bad angle sensor prius
       for fw in car_fw:
         if fw.ecu == "eps" and not fw.fwVersion == b'8965B47060\x00\x00\x00\x00\x00\x00':
           if ret.flags & ToyotaFlags.ZSS.value:
             CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
           else:
-            ret.steerActuatorDelay = 0.25
+            ret.steerActuatorDelay = 0.3
             CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning, steering_angle_deadzone_deg=0.2)
 
     elif candidate in (CAR.LEXUS_RX, CAR.LEXUS_RX_TSS2):
