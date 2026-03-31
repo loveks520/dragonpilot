@@ -413,8 +413,8 @@ class LongitudinalMpc:
     self.params[:,2] = np.min(x_obstacles, axis=1)
     self.params[:,3] = np.copy(self.prev_a)
     self.params[:,4] = t_follow
-    self.params[:, 5] = LEAD_DANGER_FACTOR # 或是動態值
-    self.params[:, 6] = stop_distance # 關鍵！將 4.6/5.2/6.0 傳入 MPC
+    self.params[:,5] = LEAD_DANGER_FACTOR #
+    self.params[:,6] = stop_distance #
 
     self.run()
     if (np.any(lead_xv_0[FCW_IDXS,0] - self.x_sol[FCW_IDXS,0] < CRASH_DISTANCE) and
