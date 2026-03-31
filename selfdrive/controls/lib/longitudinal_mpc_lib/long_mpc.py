@@ -100,9 +100,11 @@ def get_stopped_equivalence_factor(v_lead, v_ego):
 def get_safe_obstacle_distance(v_ego, t_follow, stop_distance=5.0):
   return (v_ego**2) / (2 * COMFORT_BRAKE) + t_follow * v_ego + stop_distance
 
-def desired_follow_distance(v_ego, v_lead, t_follow=None):
+def desired_follow_distance(v_ego, v_lead, t_follow=None, stop_distance=None):
   if t_follow is None:
     t_follow = get_T_FOLLOW()
+  if stop_distance is None:
+    stop_distance = get_stop_distance()
   return get_safe_obstacle_distance(v_ego, t_follow) - get_stopped_equivalence_factor(v_lead, v_ego)
 
 
@@ -413,7 +415,7 @@ class LongitudinalMpc:
     self.params[:,2] = np.min(x_obstacles, axis=1)
     self.params[:,3] = np.copy(self.prev_a)
     self.params[:,4] = t_follow
-    self.params[:,5] = LEAD_DANGER_FACTOR #
+    #self.params[:,5] = LEAD_DANGER_FACTOR #
     self.params[:,6] = stop_distance #
 
     self.run()
