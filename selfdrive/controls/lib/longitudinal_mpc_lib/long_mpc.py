@@ -83,7 +83,7 @@ def get_stop_distance(personality=log.LongitudinalPersonality.standard):
   if personality == log.LongitudinalPersonality.relaxed:
     return 6.0
   elif personality == log.LongitudinalPersonality.standard:
-    return 5.2
+    return 5.
   elif personality == log.LongitudinalPersonality.aggressive:
     return 4.6
   else:
