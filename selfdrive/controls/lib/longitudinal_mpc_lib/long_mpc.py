@@ -60,11 +60,11 @@ CRUISE_MAX_ACCEL = 1.6
 
 def get_jerk_factor(personality=log.LongitudinalPersonality.standard):
   if personality==log.LongitudinalPersonality.relaxed:
-    return 0.85
+    return 0.9
   elif personality==log.LongitudinalPersonality.standard:
-    return 0.7
+    return 0.75
   elif personality==log.LongitudinalPersonality.aggressive:
-    return 0.4
+    return 0.5
   else:
     raise NotImplementedError("Longitudinal personality not supported")
 
@@ -73,19 +73,19 @@ def get_T_FOLLOW(personality=log.LongitudinalPersonality.standard):
   if personality==log.LongitudinalPersonality.relaxed:
     return 1.65
   elif personality==log.LongitudinalPersonality.standard:
-    return 1.4
+    return 1.45
   elif personality==log.LongitudinalPersonality.aggressive:
-    return 0.9
+    return 1.25
   else:
     raise NotImplementedError("Longitudinal personality not supported")
 
 def get_stop_distance(personality=log.LongitudinalPersonality.standard):
   if personality == log.LongitudinalPersonality.relaxed:
-    return 6.0  # 舒適模式停遠一點
+    return 6.0
   elif personality == log.LongitudinalPersonality.standard:
-    return 5.2  # 標準模式維持 5 公尺
+    return 5.2
   elif personality == log.LongitudinalPersonality.aggressive:
-    return 4.5  # 激進模式停近一點，防止插隊
+    return 4.6
   else:
     raise NotImplementedError("Personality not supported")
 
