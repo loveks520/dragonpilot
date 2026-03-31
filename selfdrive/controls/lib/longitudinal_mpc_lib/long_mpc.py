@@ -79,6 +79,16 @@ def get_T_FOLLOW(personality=log.LongitudinalPersonality.standard):
   else:
     raise NotImplementedError("Longitudinal personality not supported")
 
+def get_stop_distance(personality=log.LongitudinalPersonality.standard):
+  if personality == log.LongitudinalPersonality.relaxed:
+    return 6.0  # 舒適模式停遠一點
+  elif personality == log.LongitudinalPersonality.standard:
+    return 5.2  # 標準模式維持 5 公尺
+  elif personality == log.LongitudinalPersonality.aggressive:
+    return 4.5  # 激進模式停近一點，防止插隊
+  else:
+    raise NotImplementedError("Personality not supported")
+
 def get_stopped_equivalence_factor(v_lead, v_ego):
   v_diff = v_lead - v_ego
   v_diff_offset = np.maximum(v_diff * 1.1, 0.0)
@@ -87,8 +97,8 @@ def get_stopped_equivalence_factor(v_lead, v_ego):
   v_diff_offset = np.clip(v_diff_offset, 0.0, 2.0)
   return (v_lead**2) / (2 * COMFORT_BRAKE) + v_diff_offset
 
-def get_safe_obstacle_distance(v_ego, t_follow):
-  return (v_ego**2) / (2 * COMFORT_BRAKE) + t_follow * v_ego + STOP_DISTANCE
+def get_safe_obstacle_distance(v_ego, t_follow, stop_distance=5.0):
+  return (v_ego**2) / (2 * COMFORT_BRAKE) + t_follow * v_ego + stop_distance
 
 def desired_follow_distance(v_ego, v_lead, t_follow=None):
   if t_follow is None:
@@ -334,6 +344,8 @@ class LongitudinalMpc:
 
   def update(self, radarstate, v_cruise, x, v, a, j, personality=log.LongitudinalPersonality.standard):
     t_follow = get_T_FOLLOW(personality)
+    stop_distance = get_stop_distance(personality)
+    
     v_ego = self.x0[1]
     self.status = radarstate.leadOne.status or radarstate.leadTwo.status
 
@@ -363,7 +375,8 @@ class LongitudinalMpc:
       v_cruise_clipped = np.clip(v_cruise * np.ones(N+1),
                                  v_lower,
                                  v_upper)
-      cruise_obstacle = np.cumsum(T_DIFFS * v_cruise_clipped) + get_safe_obstacle_distance(v_cruise_clipped, t_follow)
+      #cruise_obstacle = np.cumsum(T_DIFFS * v_cruise_clipped) + get_safe_obstacle_distance(v_cruise_clipped, t_follow)
+      cruise_obstacle = np.cumsum(T_DIFFS * v_cruise_clipped) + get_safe_obstacle_distance(v_cruise_clipped, t_follow, stop_distance)
       x_obstacles = np.column_stack([lead_0_obstacle, lead_1_obstacle, cruise_obstacle])
       self.source = SOURCES[np.argmin(x_obstacles[0])]
 
