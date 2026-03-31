@@ -94,7 +94,7 @@ def get_stopped_equivalence_factor(v_lead, v_ego):
   v_diff_offset = np.maximum(v_diff * 1.1, 0.0)
   speed_factor = np.maximum((10.0 - v_ego) / 10.0, 0.0)
   v_diff_offset *= speed_factor
-  v_diff_offset = np.clip(v_diff_offset, 0.0, 2.0)
+  v_diff_offset = np.clip(v_diff_offset, 0.0, 1.8)
   return (v_lead**2) / (2 * COMFORT_BRAKE) + v_diff_offset
 
 def get_safe_obstacle_distance(v_ego, t_follow, stop_distance=5.0):
