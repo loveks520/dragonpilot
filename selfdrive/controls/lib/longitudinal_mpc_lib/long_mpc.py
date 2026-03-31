@@ -26,7 +26,7 @@ SOURCES = ['lead0', 'lead1', 'cruise', 'e2e']
 
 X_DIM = 3
 U_DIM = 1
-PARAM_DIM = 6
+PARAM_DIM = 7
 COST_E_DIM = 5
 COST_DIM = COST_E_DIM + 1
 CONSTR_DIM = 4
@@ -133,7 +133,8 @@ def gen_long_model():
   prev_a = SX.sym('prev_a')
   lead_t_follow = SX.sym('lead_t_follow')
   lead_danger_factor = SX.sym('lead_danger_factor')
-  model.p = vertcat(a_min, a_max, x_obstacle, prev_a, lead_t_follow, lead_danger_factor)
+  stop_dist_param = SX.sym('stop_dist_param') # 新增這行
+  model.p = vertcat(a_min, a_max, x_obstacle, prev_a, lead_t_follow, lead_danger_factor, stop_dist_param)
 
   # dynamics model
   f_expl = vertcat(v_ego, a_ego, j_ego)
@@ -169,11 +170,12 @@ def gen_long_ocp():
   prev_a = ocp.model.p[3]
   lead_t_follow = ocp.model.p[4]
   lead_danger_factor = ocp.model.p[5]
+  stop_dist_param = ocp.model.p[6] # 新增這行
 
   ocp.cost.yref = np.zeros((COST_DIM, ))
   ocp.cost.yref_e = np.zeros((COST_E_DIM, ))
 
-  desired_dist_comfort = get_safe_obstacle_distance(v_ego, lead_t_follow, stop_distance)
+  desired_dist_comfort = get_safe_obstacle_distance(v_ego, lead_t_follow, stop_dist_param)
 
   # The main cost in normal operation is how close you are to the "desired" distance
   # from an obstacle at every timestep. This obstacle can be a lead car
@@ -411,6 +413,8 @@ class LongitudinalMpc:
     self.params[:,2] = np.min(x_obstacles, axis=1)
     self.params[:,3] = np.copy(self.prev_a)
     self.params[:,4] = t_follow
+    self.params[:, 5] = LEAD_DANGER_FACTOR # 或是動態值
+    self.params[:, 6] = stop_distance # 關鍵！將 4.6/5.2/6.0 傳入 MPC
 
     self.run()
     if (np.any(lead_xv_0[FCW_IDXS,0] - self.x_sol[FCW_IDXS,0] < CRASH_DISTANCE) and
