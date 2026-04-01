@@ -77,7 +77,7 @@ class CarInterface(CarInterfaceBase):
 
     if candidate == CAR.TOYOTA_PRIUS:
       stop_and_go = True
-      ret.steerActuatorDelay = 0.17
+      ret.steerActuatorDelay = 0.15
       ret.steerRatio = 16.2
       ret.tireStiffnessFactor = 0.95
       # Only give steer angle deadzone to for bad angle sensor prius
