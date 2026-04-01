@@ -77,9 +77,18 @@ class CarInterface(CarInterfaceBase):
 
     if candidate == CAR.TOYOTA_PRIUS:
       stop_and_go = True
-      ret.steerActuatorDelay = 0.15
-      ret.steerRatio = 16.2
-      ret.tireStiffnessFactor = 0.95
+      #ret.steerActuatorDelay = 0.15
+      #ret.steerRatio = 16.2
+      #ret.tireStiffnessFactor = 0.95
+      ret.steerActuatorDelay = 0.13
+      ret.steerRatio = 15.7
+      ret.tireStiffnessFactor = 1.02
+      ret.lateralTuning.init('pid')
+      ret.lateralTuning.pid.kpBP = [0.]
+      ret.lateralTuning.pid.kiBP = [0.]
+      ret.lateralTuning.pid.kpV = [0.55]
+      ret.lateralTuning.pid.kiV = [0.08]
+      ret.lateralTuning.pid.kf = 0.000075
       # Only give steer angle deadzone to for bad angle sensor prius
       for fw in car_fw:
         if fw.ecu == "eps" and not fw.fwVersion == b'8965B47060\x00\x00\x00\x00\x00\x00':
