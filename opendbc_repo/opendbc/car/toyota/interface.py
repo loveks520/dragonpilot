@@ -77,9 +77,9 @@ class CarInterface(CarInterfaceBase):
 
     if candidate == CAR.TOYOTA_PRIUS:
       stop_and_go = True
-      ret.steerActuatorDelay = 0.15
-      ret.steerRatio = 16.2
-      ret.tireStiffnessFactor = 0.95
+      ret.steerActuatorDelay = 0.13
+      ret.steerRatio = 1.57
+      ret.tireStiffnessFactor = 1.02
       
       #ret.steerActuatorDelay = 0.13
       #ret.steerRatio = 15.7
@@ -97,7 +97,7 @@ class CarInterface(CarInterfaceBase):
             CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
           else:
             #ret.steerActuatorDelay = 0.3
-            CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning, steering_angle_deadzone_deg=0.3)
+            CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning, steering_angle_deadzone_deg=0.2)
 
     elif candidate in (CAR.LEXUS_RX, CAR.LEXUS_RX_TSS2):
       stop_and_go = True
