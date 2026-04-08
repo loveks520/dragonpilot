@@ -78,7 +78,7 @@ class CarInterface(CarInterfaceBase):
     if candidate == CAR.TOYOTA_PRIUS:
       stop_and_go = True
       ret.steerActuatorDelay = 0.13
-      ret.steerRatio = 1.57
+      ret.steerRatio = 15.7
       ret.tireStiffnessFactor = 1.02
       
       #ret.steerActuatorDelay = 0.13
