@@ -79,7 +79,7 @@ class CarInterface(CarInterfaceBase):
       stop_and_go = True
       ret.steerActuatorDelay = 0.10
       ret.steerRatio = 15.3
-      ret.tireStiffnessFactor = 0.97
+      ret.tireStiffnessFactor = 0.6371
       
       #ret.steerActuatorDelay = 0.13
       #ret.steerRatio = 15.7
