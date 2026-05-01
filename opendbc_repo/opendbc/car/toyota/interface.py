@@ -98,7 +98,7 @@ class CarInterface(CarInterfaceBase):
           if ret.flags & ToyotaFlags.ZSS.value:
             CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
           else:
-            CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning, steering_angle_deadzone_deg=0.2)
+            CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning, steering_angle_deadzone_deg=0.3)
 
     elif candidate in (CAR.LEXUS_RX, CAR.LEXUS_RX_TSS2):
       stop_and_go = True
