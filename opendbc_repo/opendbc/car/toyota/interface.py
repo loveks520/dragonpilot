@@ -79,9 +79,9 @@ class CarInterface(CarInterfaceBase):
       stop_and_go = True
       #ret.wheelbase = 2.70
       ret.steerActuatorDelay = 0.25
-      ret.steerRatio = 13.8
+      ret.steerRatio = 13.5
       
-      ret.tireStiffnessFactor = 1.0
+      #ret.tireStiffnessFactor = 1.0
       
       #ret.lateralTuning.init('indi')
       #ret.lateralTuning.indi.innerLoopGainBP = [0.]
