@@ -78,10 +78,10 @@ class CarInterface(CarInterfaceBase):
     if candidate == CAR.TOYOTA_PRIUS:
       stop_and_go = True
       #ret.wheelbase = 2.70
-      ret.steerActuatorDelay = 0.25
-      ret.steerRatio = 13.5
+      ret.steerActuatorDelay = 0.22
+      ret.steerRatio = 14.2
       
-      #ret.tireStiffnessFactor = 1.0
+      ret.tireStiffnessFactor = 0.85
       
       #ret.lateralTuning.init('indi')
       #ret.lateralTuning.indi.innerLoopGainBP = [0.]
@@ -98,7 +98,9 @@ class CarInterface(CarInterfaceBase):
           if ret.flags & ToyotaFlags.ZSS.value:
             CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning)
           else:
-            CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning, steering_angle_deadzone_deg=0.3)
+            CarInterfaceBase.configure_torque_tune(candidate, ret.lateralTuning, steering_angle_deadzone_deg=0.5)
+            ret.lateralTuning.torque.friction = 0.12
+            ret.lateralTuning.torque.latAccelFactor = 2.25
 
     elif candidate in (CAR.LEXUS_RX, CAR.LEXUS_RX_TSS2):
       stop_and_go = True
